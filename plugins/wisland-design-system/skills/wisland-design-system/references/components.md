@@ -174,13 +174,24 @@
 .progress > i { display:block; height:100%; background:var(--blue-500); border-radius:999px; }
 ```
 
-## Form (Select · Checkbox · Radio)
-Text Field(위 참고) + 셀렉트/체크/라디오. 라벨 위, 필수 `*`는 status-negative, 체크/라디오는 `accent-color:var(--blue-500)`.
+## Form (Dropdown · Checkbox · Radio)
+Text Field(위 참고) + 드롭다운/체크/라디오. 라벨 위, 필수 `*`는 status-negative, 체크/라디오는 `accent-color:var(--blue-500)`.
+
+**드롭다운(Select)은 커스텀으로 만들어요.** 네이티브 `<select>`는 닫힌 모습만 스타일링되고 **열린 옵션 목록은 OS가 그려서** 하이라이트 색·모양을 브랜드 톤으로 못 바꿔요(쨍한 기본 파랑). 그래서 트리거 버튼 + 직접 만든 listbox를 써요. 선택 항목 = `bg-blue-primary`+`txt-blue-primary`, hover = `bg-tertiary`, 메뉴 = `shadow-lg`. (JS로 open 토글·선택·바깥 클릭/esc 닫기)
 ```css
 .req { color:var(--status-negative); }
-.select select { width:100%; font:inherit; font-size:15px; color:var(--txt-primary); background:var(--bg-primary);
-  border:1.5px solid var(--border-secondary); border-radius:12px; padding:13px 40px 13px 15px; appearance:none; outline:none; }
-.select select:focus { border-color:var(--blue-500); }  /* chevron-down 아이콘을 우측에 absolute로 */
+.dropdown { position:relative; width:100%; }
+.dd-trigger { width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px;
+  font:inherit; font-size:15px; color:var(--txt-primary); background:var(--bg-primary);
+  border:1.5px solid var(--border-secondary); border-radius:12px; padding:13px 15px; cursor:pointer; }
+.dropdown.open .dd-trigger { border-color:var(--blue-500); }
+.dropdown.open .dd-chev { transform:rotate(180deg); }
+.dd-menu { position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20; list-style:none; margin:0; padding:6px;
+  background:var(--bg-primary); border:1px solid var(--border-tertiary); border-radius:12px; box-shadow:var(--shadow-lg); }
+.dd-opt { font-size:14.5px; color:var(--txt-secondary); padding:10px 12px; border-radius:8px; cursor:pointer; }
+.dd-opt:hover { background:var(--bg-tertiary); color:var(--txt-primary); }
+.dd-opt.selected { background:var(--bg-blue-primary); color:var(--txt-blue-primary); font-weight:600; } /* 다크: var(--blue-200) */
+/* 체크/라디오는 네이티브로 충분 — accent-color만 지정 */
 .check { display:inline-flex; align-items:center; gap:9px; font-size:14px; color:var(--txt-secondary); cursor:pointer; }
 .check input { width:18px; height:18px; accent-color:var(--blue-500); }
 ```

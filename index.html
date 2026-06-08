@@ -459,12 +459,22 @@
 
     /* ---- Form (select · check · radio) ---- */
     .req { color:var(--status-negative); margin-left:2px; }
-    .select { position:relative; }
-    .select select { width:100%; font-family:inherit; font-size:15px; color:var(--txt-primary);
-      background:var(--bg-primary); border:1.5px solid var(--border-secondary); border-radius:12px;
-      padding:13px 40px 13px 15px; outline:none; appearance:none; cursor:pointer; }
-    .select select:focus { border-color:var(--blue-500); }
-    .select .chev { position:absolute; right:13px; top:50%; transform:translateY(-50%); color:var(--txt-tertiary); pointer-events:none; display:flex; }
+    /* Custom dropdown — 네이티브 select는 열린 목록을 브랜드 스타일링 못 하므로 커스텀 사용 */
+    .dropdown { position:relative; width:100%; }
+    .dd-trigger { width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px;
+      font-family:inherit; font-size:15px; color:var(--txt-primary); background:var(--bg-primary);
+      border:1.5px solid var(--border-secondary); border-radius:12px; padding:13px 15px; cursor:pointer; text-align:left; }
+    .dropdown.open .dd-trigger, .dd-trigger:focus-visible { border-color:var(--blue-500); outline:none; }
+    .dd-chev { color:var(--txt-tertiary); display:flex; transition:transform .18s; flex:0 0 auto; }
+    .dropdown.open .dd-chev { transform:rotate(180deg); }
+    .dd-menu { position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20; list-style:none; margin:0;
+      background:var(--bg-primary); border:1px solid var(--border-tertiary); border-radius:12px; box-shadow:var(--shadow-lg);
+      padding:6px; opacity:0; visibility:hidden; transform:translateY(-4px); transition:.15s; }
+    .dropdown.open .dd-menu { opacity:1; visibility:visible; transform:translateY(0); }
+    .dd-opt { font-size:14.5px; color:var(--txt-secondary); padding:10px 12px; border-radius:8px; cursor:pointer; }
+    .dd-opt:hover { background:var(--bg-tertiary); color:var(--txt-primary); }
+    .dd-opt.selected { background:var(--bg-blue-primary); color:var(--txt-blue-primary); font-weight:600; }
+    [data-theme="dark"] .dd-opt.selected { color:var(--blue-200); }
     .check { display:inline-flex; align-items:center; gap:9px; font-size:14px; color:var(--txt-secondary); cursor:pointer; }
     .check input { width:18px; height:18px; accent-color:var(--blue-500); }
 
@@ -1066,9 +1076,16 @@
               </div>
               <div class="field">
                 <label>분류</label>
-                <div class="select">
-                  <select><option>대화형 AI</option><option>이미지 생성</option><option>영상 생성</option></select>
-                  <span class="chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+                <div class="dropdown">
+                  <button type="button" class="dd-trigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="dd-value">영상 생성</span>
+                    <span class="dd-chev"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+                  </button>
+                  <ul class="dd-menu" role="listbox">
+                    <li class="dd-opt" role="option">대화형 AI</li>
+                    <li class="dd-opt" role="option">이미지 생성</li>
+                    <li class="dd-opt selected" role="option">영상 생성</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -1822,8 +1839,29 @@
       document.getElementById('sheet-apply').addEventListener('click',()=>{ close(); showToast('적용했어요'); });
     }
 
+    /* ---------- DROPDOWN (custom select) ---------- */
+    function bindDropdowns(){
+      const dds=[...document.querySelectorAll('.dropdown')];
+      dds.forEach(dd=>{
+        const trigger=dd.querySelector('.dd-trigger'), val=dd.querySelector('.dd-value'), menu=dd.querySelector('.dd-menu');
+        trigger.addEventListener('click', e=>{
+          e.stopPropagation();
+          const willOpen=!dd.classList.contains('open');
+          dds.forEach(d=>{ d.classList.remove('open'); d.querySelector('.dd-trigger').setAttribute('aria-expanded','false'); });
+          if(willOpen){ dd.classList.add('open'); trigger.setAttribute('aria-expanded','true'); }
+        });
+        menu.querySelectorAll('.dd-opt').forEach(o=>o.addEventListener('click', ()=>{
+          menu.querySelectorAll('.dd-opt').forEach(x=>x.classList.remove('selected'));
+          o.classList.add('selected'); if(val) val.textContent=o.textContent;
+          dd.classList.remove('open'); trigger.setAttribute('aria-expanded','false');
+        }));
+      });
+      document.addEventListener('click', ()=>dds.forEach(d=>{ d.classList.remove('open'); d.querySelector('.dd-trigger').setAttribute('aria-expanded','false'); }));
+      document.addEventListener('keydown', e=>{ if(e.key==='Escape') dds.forEach(d=>d.classList.remove('open')); });
+    }
+
     /* ---------- INIT ---------- */
-    renderColors(); renderTokens(); renderType(); renderIcons(); renderLayout(); bindComponents(); renderCalendar(); bindCalendar(); bindOverlay(); initScrollSpy();
+    renderColors(); renderTokens(); renderType(); renderIcons(); renderLayout(); bindComponents(); renderCalendar(); bindCalendar(); bindOverlay(); bindDropdowns(); initScrollSpy();
   </script>
 </body>
 </html>
