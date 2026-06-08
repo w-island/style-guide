@@ -1,0 +1,26 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "w-island",
+  "description": "더블유아일랜드 사내 Claude Code 플러그인 마켓플레이스",
+  "owner": {
+    "name": "W-Island Creative",
+    "email": "creative@wisland.co.kr"
+  },
+  "version": "1.0.0",
+  "plugins": [
+    {
+      "name": "wisland-design-system",
+      "displayName": "더블유아일랜드 디자인 시스템",
+      "description": "사내 도구 UI를 만들/고칠 때 따르는 디자인 시스템(컬러·타이포·아이콘·컴포넌트·패턴·UX 라이팅)",
+      "version": "1.0.0",
+      "source": "./plugins/wisland-design-system",
+      "category": "design",
+      "author": {
+        "name": "W-Island Creative",
+        "email": "creative@wisland.co.kr"
+      },
+      "homepage": "https://w-island.github.io/style-guide/",
+      "tags": ["design-system", "ui", "design-tokens", "wisland"]
+    }
+  ]
+}
