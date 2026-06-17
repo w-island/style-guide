@@ -1506,6 +1506,18 @@
             </ul>
           </div>
 
+          <div class="card" style="margin-top:10px">
+            <div class="comp-label">설치가 안 될 때 — 링크로 바로 적용 (설치·등록 불필요)</div>
+            <div class="note" style="margin:6px 0 10px">플러그인 등록이 안 되는 환경(구버전·권한·웹 등)에서도 돼요. 공개 레포라, 아래 프롬프트를 Claude에 그대로 붙여넣으면 기준 문서를 읽어와 전체 적용해요.</div>
+            <pre class="cmd" id="apply-prompt">아래 더블유아일랜드 디자인 시스템 기준을 읽고, 지금 작업/이 프로젝트에 전체 적용해줘.
+- https://raw.githubusercontent.com/w-island/style-guide/main/plugins/wisland-design-system/skills/wisland-design-system/SKILL.md
+- https://raw.githubusercontent.com/w-island/style-guide/main/plugins/wisland-design-system/skills/wisland-design-system/references/tokens.md
+- https://raw.githubusercontent.com/w-island/style-guide/main/plugins/wisland-design-system/skills/wisland-design-system/references/components.md
+- https://raw.githubusercontent.com/w-island/style-guide/main/plugins/wisland-design-system/skills/wisland-design-system/references/ux-writing.md
+색·컴포넌트·문구·다크모드까지 이 기준대로 맞추고, 기존 토큰 시스템이 있으면 값만 리매핑해줘.</pre>
+            <div class="term-tools" style="margin-top:10px"><button class="btn btn-primary sm" id="copy-apply-prompt">적용 프롬프트 복사</button></div>
+          </div>
+
           <div class="sub">4. 업데이트</div>
           <div class="note">디자인 시스템이 바뀌면 최신으로 당겨오세요.</div>
           <div class="card"><pre class="cmd">/plugin marketplace update w-island
@@ -1996,7 +2008,12 @@
       }
       step();
     }
-    function bindTerm(){ const btn=document.getElementById('term-play'); if(!btn) return; btn.addEventListener('click', playTerm); playTerm(); }
+    function bindTerm(){
+      const btn=document.getElementById('term-play');
+      const cap=document.getElementById('copy-apply-prompt');
+      if(cap) cap.addEventListener('click', ()=>{ const p=document.getElementById('apply-prompt'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('적용 프롬프트를 복사했어요')); });
+      if(!btn) return; btn.addEventListener('click', playTerm); playTerm();
+    }
 
     /* ---------- INIT ---------- */
     renderColors(); renderTokens(); renderType(); renderIcons(); renderLayout(); bindComponents(); renderCalendar(); bindCalendar(); bindOverlay(); bindDropdowns(); initScrollSpy(); bindTerm();
