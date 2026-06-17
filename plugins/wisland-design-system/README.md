@@ -40,11 +40,22 @@ Claude Code에서 아래 두 줄을 입력하세요. (레포를 clone할 필요 
 /plugin update wisland-design-system@w-island
 ```
 
-## 수동 호출 (필요할 때)
+## 진행 중인 작업에 전체 적용 (강하게)
+
+"적용해줘"가 약하게 먹힐 때 — 슬래시 커맨드로 현재 작업 전체에 디자인 시스템을 **전면** 적용해요. 토큰·컴포넌트·문구·다크모드까지 한 번에 훑어 맞춰줍니다.
 
 ```
+# 진행 중인 작업/프로젝트 전체에 적용 (범위 인자 옵션)
+/wisland-design-system:apply 전체
+# 또는 스킬을 직접 강제 호출
 /wisland-design-system:wisland-design-system
 ```
+
+### 잘 안 먹힐 때 체크리스트
+- **설치·활성 확인**: `/plugin` 목록에 `wisland-design-system`이 enabled인지. 막 설치했다면 **세션을 새로 시작**해야 인식돼요(가장 흔한 원인).
+- **프로젝트에 항상 강제**: 그 프로젝트 `CLAUDE.md`에 한 줄 추가 →
+  `이 프로젝트의 모든 UI·문구는 wisland-design-system 디자인 시스템을 따른다.`
+- **그래도 약하면** 위 `/wisland-design-system:apply`를 쓰세요. 자동 트리거와 달리 **항상** 전수 적용돼요.
 
 ---
 

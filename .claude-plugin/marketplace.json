@@ -11,8 +11,8 @@
     {
       "name": "wisland-design-system",
       "displayName": "더블유아일랜드 디자인 시스템",
-      "description": "사내 도구 UI를 만들/고칠 때 따르는 디자인 시스템(컬러·타이포·아이콘·컴포넌트·패턴·UX 라이팅)",
-      "version": "1.0.0",
+      "description": "사내 도구 UI를 만들/고칠 때 따르는 디자인 시스템(컬러·타이포·아이콘·컴포넌트·패턴·UX 라이팅) + /apply 전체적용 커맨드",
+      "version": "1.1.0",
       "source": "./plugins/wisland-design-system",
       "category": "design",
       "author": {

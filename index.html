@@ -1422,7 +1422,23 @@
             <div class="note" style="margin:14px 0 0">※ 단순한 한 줄 질문엔 안 뜰 수 있고, 실제 UI 작업일 때 발동돼요.</div>
           </div>
 
-          <div class="sub">3. 업데이트</div>
+          <div class="sub">3. 진행 중인 작업에 <b>전체 적용</b> (강하게)</div>
+          <div class="note">"적용해줘"가 약하게 먹힐 때 — 슬래시 커맨드로 디자인 시스템을 현재 작업에 <b>전면</b> 적용해요. 토큰·컴포넌트·문구·다크모드까지 한 번에 훑어서 맞춰줍니다.</div>
+          <div class="card"><pre class="cmd"><span class="c"># 진행 중인 작업/프로젝트 전체에 적용 (범위 인자 옵션)</span>
+/wisland-design-system:apply 전체
+<span class="c"># 또는 스킬을 직접 강제 호출</span>
+/wisland-design-system:wisland-design-system</pre></div>
+
+          <div class="card" style="margin-top:10px">
+            <div class="comp-label">잘 안 먹힐 때 체크리스트</div>
+            <ul style="padding-left:18px; font-size:14px; color:var(--txt-secondary); display:grid; gap:8px; margin-top:6px;">
+              <li><b>설치·활성 확인</b>: <code>/plugin</code> 목록에 <code>wisland-design-system</code>이 <b>enabled</b>인지 확인. 막 설치했다면 <b>세션을 새로 시작</b>해야 인식돼요(가장 흔한 원인).</li>
+              <li><b>프로젝트에 항상 강제</b>하려면 그 프로젝트 <code>CLAUDE.md</code>에 한 줄 추가:<br/><code>이 프로젝트의 모든 UI·문구는 wisland-design-system 디자인 시스템을 따른다.</code></li>
+              <li><b>그래도 약하면</b> 위 <code>/wisland-design-system:apply</code> 커맨드를 쓰세요 — 자동 트리거와 달리 <b>항상</b> 전수 적용돼요.</li>
+            </ul>
+          </div>
+
+          <div class="sub">4. 업데이트</div>
           <div class="note">디자인 시스템이 바뀌면 최신으로 당겨오세요.</div>
           <div class="card"><pre class="cmd">/plugin marketplace update w-island
 /plugin update wisland-design-system@w-island</pre></div>

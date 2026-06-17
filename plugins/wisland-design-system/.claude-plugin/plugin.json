@@ -1,7 +1,7 @@
 {
   "name": "wisland-design-system",
   "displayName": "더블유아일랜드 디자인 시스템",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "더블유아일랜드 사내 도구(AI Hub 등) UI를 만들거나 수정할 때 따르는 디자인 시스템 — W-ISLAND Blue/중립 그레이 토큰, Pretendard 타이포, 라인 아이콘, 컴포넌트(버튼·입력·리스트·뱃지·탭·토글·캘린더·오버레이), 로고/GNB·LNB 패턴, 해요체 UX 라이팅 6원칙.",
   "author": {
     "name": "W-Island Creative",
