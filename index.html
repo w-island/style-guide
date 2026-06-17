@@ -604,6 +604,21 @@
     .nav-group a.active { background:var(--bg-blue-primary); color:var(--txt-blue-primary); font-weight:600; }
     [data-theme="dark"] .nav-group a.active { color:var(--blue-200); }
 
+    /* ---- Terminal demo (따라하기) ---- */
+    .term { background:#0d1117; border:1px solid #30363d; border-radius:12px; overflow:hidden; box-shadow:var(--shadow-lg); }
+    .term-bar { display:flex; align-items:center; gap:7px; padding:10px 14px; background:#161b22; border-bottom:1px solid #30363d; }
+    .term-bar i { width:11px; height:11px; border-radius:50%; display:inline-block; }
+    .term-bar .r{ background:#ff5f56; } .term-bar .y{ background:#febc2e; } .term-bar .g{ background:#27c93f; }
+    .term-bar b { margin-left:6px; font-size:12px; color:#8b949e; font-weight:500; font-family:ui-monospace,monospace; }
+    .term-body { padding:16px 18px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13.5px;
+      line-height:1.95; color:#c9d1d9; min-height:236px; white-space:pre-wrap; word-break:break-all; }
+    .term-body .p { color:#7ee787; }
+    .term-body .ok { color:#58a6ff; }
+    .term-body .muted { color:#8b949e; }
+    .term-cur { display:inline-block; width:7px; height:15px; background:#c9d1d9; vertical-align:-2px; animation:blink 1s step-end infinite; }
+    @keyframes blink { 50%{ opacity:0; } }
+    .term-tools { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+
     @media (max-width:900px){
       .sidebar{ display:none; }
       .container{ padding:32px 20px 100px; }
@@ -1403,7 +1418,20 @@
             <p>이 디자인 시스템을 Claude Code 플러그인으로 설치하면, 평소처럼 말하기만 해도 Claude가 이 가이드대로 작업해요. 레포를 clone할 필요 없고, 본인의 <b>모든 프로젝트</b>에 적용됩니다.</p>
           </div>
 
-          <div class="sub first">1. 설치 — 한 번만</div>
+          <div class="sub first">▶ 30초 따라하기 (실제 흐름)</div>
+          <div class="note">팀원에게 이 데모를 보여주면 돼요. <b>재생</b>을 누르면 입력 순서가 그대로 재현되고, 아래 버튼으로 명령을 바로 복사할 수 있어요.</div>
+          <div class="term">
+            <div class="term-bar"><i class="r"></i><i class="y"></i><i class="g"></i><b>Claude Code</b></div>
+            <div class="term-body" id="term-body"></div>
+          </div>
+          <div class="term-tools">
+            <button class="btn btn-primary sm" id="term-play">▶ 재생</button>
+            <button class="btn btn-secondary sm" data-copy="/plugin marketplace add w-island/style-guide">① 마켓 등록 복사</button>
+            <button class="btn btn-secondary sm" data-copy="/plugin install wisland-design-system@w-island">② 설치 복사</button>
+            <button class="btn btn-secondary sm" data-copy="/wisland-design-system:apply 전체">③ 전체 적용 복사</button>
+          </div>
+
+          <div class="sub">1. 설치 — 한 번만</div>
           <div class="note">Claude Code에서 아래 두 줄을 입력하세요.</div>
           <div class="card"><pre class="cmd"><span class="c"># 마켓플레이스 등록</span>
 /plugin marketplace add w-island/style-guide
@@ -1876,8 +1904,47 @@
       document.addEventListener('keydown', e=>{ if(e.key==='Escape') dds.forEach(d=>d.classList.remove('open')); });
     }
 
+    /* ---------- TERMINAL DEMO ---------- */
+    const DEMO=[
+      {k:'cmd', t:'/plugin marketplace add w-island/style-guide'},
+      {k:'ok',  t:'✓ 마켓플레이스 "w-island" 추가됨'},
+      {k:'cmd', t:'/plugin install wisland-design-system@w-island'},
+      {k:'ok',  t:'✓ 설치 완료 — 적용하려면 세션을 새로 시작하세요'},
+      {k:'muted', t:'──── 새 세션 시작 ────'},
+      {k:'cmd', t:'/wisland-design-system:apply 전체'},
+      {k:'muted', t:'더블유아일랜드 디자인 시스템을 전체 적용할게요…'},
+      {k:'ok',  t:'✓ 색상·컴포넌트·문구·다크모드까지 적용 완료'},
+    ];
+    let termTimer=null;
+    function playTerm(){
+      const body=document.getElementById('term-body'); if(!body) return;
+      clearTimeout(termTimer); body.innerHTML=''; let i=0;
+      const esc=s=>s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      const addLine=()=>{ const d=document.createElement('div'); body.appendChild(d); return d; };
+      function step(){
+        if(i>=DEMO.length) return;
+        const it=DEMO[i++];
+        if(it.k==='cmd'){
+          const d=addLine(); let j=0; const txt=it.t;
+          (function type(){
+            if(j<=txt.length){ d.innerHTML='<span class="p">&gt; </span>'+esc(txt.slice(0,j))+'<span class="term-cur"></span>'; j++; termTimer=setTimeout(type,30); }
+            else { d.innerHTML='<span class="p">&gt; </span>'+esc(txt); termTimer=setTimeout(step,400); }
+          })();
+        } else {
+          const d=addLine(); d.innerHTML='<span class="'+(it.k==='ok'?'ok':'muted')+'">'+esc(it.t)+'</span>';
+          termTimer=setTimeout(step,600);
+        }
+      }
+      step();
+    }
+    function bindTerm(){
+      const btn=document.getElementById('term-play'); if(!btn) return;
+      btn.addEventListener('click', playTerm);
+      playTerm();
+    }
+
     /* ---------- INIT ---------- */
-    renderColors(); renderTokens(); renderType(); renderIcons(); renderLayout(); bindComponents(); renderCalendar(); bindCalendar(); bindOverlay(); bindDropdowns(); initScrollSpy();
+    renderColors(); renderTokens(); renderType(); renderIcons(); renderLayout(); bindComponents(); renderCalendar(); bindCalendar(); bindOverlay(); bindDropdowns(); initScrollSpy(); bindTerm();
   </script>
 </body>
 </html>
