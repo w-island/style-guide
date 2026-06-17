@@ -624,19 +624,29 @@
     .term-in .p { color:#7ee787; }
     .tl { margin:1px 0; }
     .tl .b { color:#58a6ff; } .tl .tool { color:#d2a8ff; } .tl .res { color:#8b949e; } .tl .sys { color:#6e7681; } .tl .ok { color:#3fb950; }
-    /* mini 실시간 미리보기 */
-    .mini { width:228px; flex:0 0 auto; }
-    .mini-label { font-size:11px; font-weight:700; color:var(--txt-caption); text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px; }
-    .mini-card { border:1px solid var(--border-tertiary); border-radius:12px; padding:16px; background:var(--bg-primary); transition:.4s ease; }
-    .mini-row { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:var(--txt-primary); }
-    .mini-dot { width:26px; height:26px; border-radius:8px; background:var(--gray-400); transition:.4s ease; flex:0 0 auto; }
-    .mini-msg { font-size:13px; color:var(--txt-tertiary); margin:10px 0 14px; transition:.25s; }
-    .mini-btn { width:100%; height:38px; border:none; border-radius:10px; font-family:inherit; font-weight:600; font-size:14px;
+    /* mini 실시간 미리보기 (미니 앱 화면 — 적용 순간 cascade 전환) */
+    .mini { width:240px; flex:0 0 auto; }
+    .mini-label { font-size:11px; font-weight:700; color:var(--txt-caption); text-transform:uppercase; letter-spacing:.04em;
+      margin-bottom:8px; display:flex; align-items:center; justify-content:space-between; }
+    .rec { font-size:10px; font-weight:700; color:var(--txt-disabled); }
+    .mini.playing .rec { color:var(--status-negative); animation:blink 1s step-end infinite; }
+    .mini-app { border:1px solid var(--border-tertiary); border-radius:12px; padding:14px; background:var(--bg-primary); display:grid; gap:11px; transition:.4s ease; }
+    .ma-top { display:flex; align-items:center; gap:8px; }
+    .ma-logo { width:24px; height:24px; border-radius:7px; background:var(--gray-400); transition:.4s ease; flex:0 0 auto; }
+    .ma-title { font-size:14px; font-weight:700; color:var(--txt-primary); }
+    .ma-row { display:flex; gap:6px; }
+    .ma-badge { font-size:11px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--bg-tertiary); color:var(--txt-tertiary); transition:.4s ease; }
+    .ma-alert { font-size:12px; padding:9px 11px; border-radius:9px; background:var(--bg-tertiary); color:var(--txt-tertiary); transition:.4s ease; }
+    .ma-btn { height:36px; border:none; border-radius:9px; font-family:inherit; font-weight:600; font-size:13.5px;
       background:var(--gray-300); color:var(--txt-secondary); cursor:pointer; transition:.4s ease; }
-    .mini.applied .mini-card { box-shadow:var(--shadow-md); }
-    .mini.applied .mini-dot { background:var(--blue-500); }
-    .mini.applied .mini-btn { background:var(--blue-500); color:#fff; }
-    .mini.applied .mini-msg { color:var(--txt-secondary); }
+    .mini.applied .mini-app { box-shadow:var(--shadow-md); }
+    .mini.applied .ma-logo { background:var(--blue-500); transition-delay:.05s; }
+    .mini.applied .ma-badge.b1 { background:color-mix(in srgb, var(--blue-500) 16%, var(--bg-primary)); color:var(--txt-blue-primary); transition-delay:.16s; }
+    .mini.applied .ma-badge.b2 { background:color-mix(in srgb, var(--status-positive) 18%, var(--bg-primary)); color:var(--status-positive); transition-delay:.24s; }
+    .mini.applied .ma-alert { background:var(--bg-blue-primary); color:var(--txt-blue-primary); transition-delay:.32s; }
+    .mini.applied .ma-btn { background:var(--blue-500); color:#fff; transition-delay:.42s; }
+    [data-theme="dark"] .mini.applied .ma-badge.b1 { color:var(--blue-200); }
+    [data-theme="dark"] .mini.applied .ma-alert { color:var(--blue-200); }
 
     @media (max-width:900px){
       .sidebar{ display:none; }
@@ -1444,12 +1454,13 @@
               <div class="term-bar"><i class="r"></i><i class="y"></i><i class="g"></i><b>Claude Code — w-island</b></div>
               <div class="term-body" id="term-body"></div>
             </div>
-            <div class="mini" id="mini-preview">
-              <div class="mini-label">실시간 미리보기</div>
-              <div class="mini-card">
-                <div class="mini-row"><span class="mini-dot"></span>샘플 도구</div>
-                <p class="mini-msg">저장되었습니다</p>
-                <button class="mini-btn" type="button">저장</button>
+            <div class="mini playing" id="mini-preview">
+              <div class="mini-label"><span>실시간 미리보기</span><span class="rec">● REC</span></div>
+              <div class="mini-app">
+                <div class="ma-top"><span class="ma-logo"></span><span class="ma-title">샘플 도구</span></div>
+                <div class="ma-row"><span class="ma-badge b1">NEW</span><span class="ma-badge b2">완료</span></div>
+                <div class="ma-alert">파일을 불러왔습니다</div>
+                <button class="ma-btn" type="button">저장</button>
               </div>
             </div>
           </div>
@@ -1953,8 +1964,8 @@
     function setMini(applied){
       const m=document.getElementById('mini-preview'); if(!m) return;
       m.classList.toggle('applied', applied);
-      const msg=m.querySelector('.mini-msg'), btn=m.querySelector('.mini-btn');
-      if(msg) msg.textContent = applied?'저장했어요':'저장되었습니다';
+      const al=m.querySelector('.ma-alert'), btn=m.querySelector('.ma-btn');
+      if(al) al.textContent = applied?'파일을 불러왔어요':'파일을 불러왔습니다';
       if(btn) btn.textContent = applied?'저장하기':'저장';
     }
     function playTerm(){
@@ -1963,7 +1974,7 @@
       const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       const add=cls=>{ const d=document.createElement('div'); if(cls) d.className=cls; body.appendChild(d); body.scrollTop=body.scrollHeight; return d; };
       function step(){
-        if(i>=DEMO.length) return;
+        if(i>=DEMO.length){ termTimer=setTimeout(playTerm, 2800); return; }  /* GIF처럼 자동 반복 */
         const it=DEMO[i++];
         if(it.k==='in'){
           const d=add('term-in'); let j=0; const txt=it.t;
