@@ -1491,11 +1491,22 @@
           </div>
 
           <div class="sub">1. 설치 — 한 번만</div>
-          <div class="note">Claude Code에서 아래 두 줄을 입력하세요.</div>
-          <div class="card"><pre class="cmd"><span class="c"># 마켓플레이스 등록</span>
+          <div class="note"><b>⚠️ OS 터미널(cmd·PowerShell)이 아니에요.</b> 아래 <code>/명령</code>은 <b>Claude Code 대화 입력창</b>(평소 Claude에게 말 거는 그 칸)에 입력해요. VS Code 확장 · 데스크탑 앱 · 터미널 CLI 모두 같은 방식이에요.</div>
+          <div class="card"><pre class="cmd"><span class="c"># Claude Code 입력창에 한 줄씩 입력</span>
 /plugin marketplace add w-island/style-guide
-<span class="c"># 플러그인 설치 (모든 프로젝트에 적용)</span>
-/plugin install wisland-design-system@w-island</pre></div>
+/plugin install wisland-design-system@w-island
+<span class="c"># 바로 활성화 (세션 새로 시작 대신)</span>
+/reload-plugins</pre></div>
+
+          <div class="card" style="margin-top:10px">
+            <div class="comp-label">메뉴(GUI)로 설치 — 명령 외우기 싫을 때</div>
+            <ol style="padding-left:18px; font-size:14px; color:var(--txt-secondary); display:grid; gap:7px; margin:6px 0 0;">
+              <li>입력창에 <code>/plugin</code> 입력 → 탭 메뉴가 떠요 (<b>Tab</b> 키로 탭 이동, 방향키+Enter로 선택).</li>
+              <li><b>Marketplaces</b> 탭 → "마켓플레이스 추가" → <code>w-island/style-guide</code> 입력</li>
+              <li><b>Discover</b> 탭 → <code>wisland-design-system</code> 선택 → 스코프 고르고 설치 (기본 <b>User</b> = 내 모든 프로젝트)</li>
+              <li><b>Installed</b> 탭에서 enabled 확인. 안 켜지면 <code>/reload-plugins</code></li>
+            </ol>
+          </div>
 
           <div class="sub">2. 사용 — 그냥 말하면 돼요</div>
           <div class="note">스킬 이름을 외울 필요 없어요. UI/디자인 작업을 부탁하면 Claude가 알아서 이 디자인 시스템을 적용해요.</div>

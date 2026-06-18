@@ -11,12 +11,15 @@
 
 ## 설치 (팀원용, 한 번만)
 
-Claude Code에서 아래 두 줄을 입력하세요. (레포를 clone할 필요 없어요)
+> ⚠️ **OS 터미널(cmd·PowerShell)이 아니에요.** 아래 `/명령`은 **Claude Code 대화 입력창**(평소 Claude에게 말 거는 칸)에 입력해요. VS Code 확장 · 데스크탑 앱 · 터미널 CLI 모두 동일.
 
 ```
 /plugin marketplace add w-island/style-guide
 /plugin install wisland-design-system@w-island
+/reload-plugins
 ```
+
+**메뉴(GUI)로도 가능**: 입력창에 `/plugin` → `Marketplaces` 탭에서 `w-island/style-guide` 추가 → `Discover` 탭에서 `wisland-design-system` 설치 → `Installed` 탭에서 확인.
 
 설치하면 **본인의 모든 프로젝트**에서 작동해요(user 스코프 기본).
 
