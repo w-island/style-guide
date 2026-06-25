@@ -177,7 +177,7 @@
 ## Form (Dropdown · Checkbox · Radio)
 Text Field(위 참고) + 드롭다운/체크/라디오. 라벨 위, 필수 `*`는 status-negative, 체크/라디오는 `accent-color:var(--blue-500)`.
 
-**드롭다운(Select)은 커스텀으로 만들어요.** 네이티브 `<select>`는 닫힌 모습만 스타일링되고 **열린 옵션 목록은 OS가 그려서** 하이라이트 색·모양을 브랜드 톤으로 못 바꿔요(쨍한 기본 파랑). 그래서 트리거 버튼 + 직접 만든 listbox를 써요. 선택 항목 = `bg-blue-primary`+`txt-blue-primary`, hover = `bg-tertiary`, 메뉴 = `shadow-lg`. (JS로 open 토글·선택·바깥 클릭/esc 닫기)
+**드롭다운(Select)은 커스텀으로 만들어요.** 네이티브 `<select>`는 닫힌 모습만 스타일링되고 **열린 옵션 목록은 OS가 그려서** 하이라이트 색·모양을 브랜드 톤으로 못 바꿔요(쨍한 기본 파랑). 그래서 트리거 버튼 + 직접 만든 listbox를 써요. 선택 항목 = `bg-blue-primary`+`txt-blue-primary`, hover = `bg-tertiary`, 메뉴 = `shadow-lg`. (JS로 open 토글·선택·바깥 클릭/esc 닫기) **파일 입력은 반대로 네이티브를 살려요** — `<select>`와 달리 파일 버튼은 `::file-selector-button`으로 브랜드 톤을 입힐 수 있어, 버튼만 고스트 버튼화하면 끝(JS 불필요).
 ```css
 .req { color:var(--status-negative); }
 .dropdown { position:relative; width:100%; }
@@ -194,6 +194,12 @@ Text Field(위 참고) + 드롭다운/체크/라디오. 라벨 위, 필수 `*`�
 /* 체크/라디오는 네이티브로 충분 — accent-color만 지정 */
 .check { display:inline-flex; align-items:center; gap:9px; font-size:14px; color:var(--txt-secondary); cursor:pointer; }
 .check input { width:18px; height:18px; accent-color:var(--blue-500); }
+/* 파일 선택 — 네이티브 버튼을 ::file-selector-button 으로 고스트 버튼화 (JS 불필요) */
+input[type=file].file-input { font-size:13px; color:var(--txt-tertiary); cursor:pointer; max-width:100%; border:none; background:none; padding:0; }
+input[type=file].file-input::file-selector-button { margin-right:12px; padding:8px 14px; border-radius:8px;
+  border:1px solid var(--border-secondary); background:var(--bg-primary); color:var(--txt-primary);
+  font:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:.15s; }
+input[type=file].file-input::file-selector-button:hover { border-color:var(--blue-500); }
 ```
 
 ## Table · Data List
@@ -256,6 +262,18 @@ Text Field(위 참고) + 드롭다운/체크/라디오. 라벨 위, 필수 `*`�
 .lnb-item:hover:not(.active) { background:var(--bg-tertiary); color:var(--txt-primary); }
 .lnb-item.active { background:var(--bg-blue-primary); color:var(--txt-blue-primary); font-weight:600; }
 .lnb-group + .lnb-group { border-top:1px solid var(--border-tertiary); margin-top:4px; padding-top:8px; }
+```
+
+## Page Header (화면 헤더)
+GNB(앱 이름 고정) 아래, 각 화면 콘텐츠 **맨 위**에 오는 제목 + 한 줄 설명 블록. 모든 화면이 같은 양식을 쓰면 메뉴를 옮겨도 한 앱처럼 보여요. 제목 Title 2(22/700), 설명 Body 2(14)·`txt-tertiary` 한 줄.
+
+- 콘텐츠가 **카드로 시작하면 첫 카드 안 맨 위**에, **KPI·표로 바로 시작하면 카드 밖**(콘텐츠 최상단)에 둬요 — 둘 다 `.page-head`로 감싸 어디서든 동일하게 렌더돼요.
+- 화면당 헤더는 **하나만**. 카드·섹션 제목(Heading 18/600)과 혼동 금지 — 페이지 제목이 더 큽니다.
+
+```css
+.page-head { margin:0 0 18px; }
+.ph-title { font-size:22px; font-weight:700; line-height:1.35; letter-spacing:-.02em; color:var(--txt-primary); margin:0 0 5px; }
+.ph-sub { font-size:14px; font-weight:400; line-height:1.6; color:var(--txt-tertiary); margin:0; }
 ```
 
 ## Tooltip

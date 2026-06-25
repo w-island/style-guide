@@ -301,6 +301,18 @@
     .field .help { font-size:12px; margin-top:7px; color:var(--txt-tertiary); }
     .field.error .help { color:var(--status-negative); }
     .field input:disabled { background:var(--bg-tertiary); color:var(--txt-disabled); }
+    /* 파일 선택 — 네이티브 버튼을 ::file-selector-button 으로 고스트 버튼화 */
+    input[type=file].file-input { font-size:13px; color:var(--txt-tertiary); cursor:pointer; max-width:100%;
+      border:none; background:none; padding:0; }
+    input[type=file].file-input::file-selector-button { margin-right:12px; padding:8px 14px; border-radius:8px;
+      border:1px solid var(--border-secondary); background:var(--bg-primary); color:var(--txt-primary);
+      font:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:.15s; }
+    input[type=file].file-input::file-selector-button:hover { border-color:var(--blue-500); }
+
+    /* ---- Page Header (화면 헤더) ---- */
+    .page-head { margin:0 0 18px; }
+    .ph-title { font-size:22px; font-weight:700; line-height:1.35; letter-spacing:-.02em; color:var(--txt-primary); margin:0 0 5px; }
+    .ph-sub { font-size:14px; font-weight:400; line-height:1.6; color:var(--txt-tertiary); margin:0; }
 
     /* ---- List Row ---- */
     .listrow { display:flex; align-items:center; gap:14px; padding:16px 18px;
@@ -710,6 +722,7 @@
         <span>Patterns</span>
         <a href="#logo">Logo &amp; Title</a>
         <a href="#navigation">GNB / LNB</a>
+        <a href="#pattern-pagehead">Page Header</a>
       </div>
       <div class="nav-group">
         <span>Guidelines</span>
@@ -1119,7 +1132,7 @@
         </section>
 
         <section id="comp-form">
-          <div class="sec-head"><h2>Form</h2><p>입력 화면 패턴이에요. 라벨은 위, 필수는 <span style="color:var(--status-negative)">*</span>, 에러는 status-negative + 무엇을 고칠지 안내. 셀렉트·체크·라디오는 브랜드 블루로 강조.</p></div>
+          <div class="sec-head"><h2>Form</h2><p>입력 화면 패턴이에요. 라벨은 위, 필수는 <span style="color:var(--status-negative)">*</span>, 에러는 status-negative + 무엇을 고칠지 안내. 셀렉트·체크·라디오는 브랜드 블루로 강조. 파일 첨부는 네이티브 버튼을 <code>::file-selector-button</code>으로 고스트 버튼화해요.</p></div>
           <div class="comp-card">
             <div class="row-wrap" style="align-items:flex-start; gap:24px">
               <div class="field">
@@ -1140,6 +1153,11 @@
                     <li class="dd-opt selected" role="option">영상 생성</li>
                   </ul>
                 </div>
+              </div>
+              <div class="field">
+                <label>첨부 파일</label>
+                <input type="file" class="file-input" />
+                <div class="help">엑셀(.xlsx) 또는 CSV</div>
               </div>
             </div>
             <div class="comp-block">
@@ -1381,6 +1399,24 @@
    ├─ 디자인 툴
    └─ 오피스 …
 </pre>
+          </div>
+        </section>
+
+        <!-- ============ PAGE HEADER ============ -->
+        <section id="pattern-pagehead">
+          <div class="sec-head">
+            <h2>Page Header</h2>
+            <p>GNB(앱 이름 고정) 아래, 각 화면 콘텐츠 맨 위에 오는 <b>제목 + 한 줄 설명</b>이에요. 모든 화면이 같은 양식을 쓰면 메뉴를 옮겨도 한 앱처럼 보여요. 콘텐츠가 카드로 시작하면 첫 카드 안 맨 위에, 표·KPI로 바로 시작하면 카드 밖(콘텐츠 최상단)에 두되 <code>.page-head</code>로 감싸 동일하게 렌더돼요. 화면당 하나만 — 카드·섹션 제목(Heading 18/600)보다 큽니다.</p>
+          </div>
+          <div class="comp-card">
+            <div class="page-head">
+              <div class="ph-title">매출 수집</div>
+              <div class="ph-sub">날짜를 선택해 채널별 매출을 수동으로 수집하고 진행 상황을 확인해요.</div>
+            </div>
+            <div class="row-wrap" style="gap:10px">
+              <button class="btn btn-primary sm">수집 시작</button>
+              <button class="btn btn-outline sm">기간 선택</button>
+            </div>
           </div>
         </section>
 
