@@ -290,7 +290,8 @@
     [data-theme="dark"] .btn-ghost { color:var(--blue-300); }
 
     /* ---- Text Field ---- */
-    .field { width:240px; }
+    .field { width:240px; max-width:100%; min-width:0; }
+    .field .file-input { max-width:100%; }
     .field label { display:block; font-size:13px; font-weight:600; margin-bottom:7px; color:var(--txt-secondary); }
     .field input { width:100%; font-family:inherit; font-size:15px; color:var(--txt-primary);
       background:var(--bg-primary); border:1.5px solid var(--border-secondary); border-radius:12px;
