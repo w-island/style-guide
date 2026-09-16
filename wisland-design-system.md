@@ -1,3 +1,271 @@
+# 더블유아일랜드(W-ISLAND) 디자인 시스템 — 통합본
+
+더블유아일랜드 사내 도구 UI의 **단일 기준** 문서입니다.
+화면·컴포넌트·색상·문구를 만들거나 고칠 때 아래 값을 그대로 쓰세요.
+여기 없는 값은 추측하지 말고 물어보세요.
+
+> Claude Code를 쓴다면 이 파일 대신 플러그인을 설치하세요 — 자동으로 최신이 유지됩니다.
+> `claude plugin marketplace add w-island/style-guide`
+>
+> 이 파일은 ChatGPT 등 플러그인을 못 쓰는 AI에 올리는 용도예요.
+> **자동 갱신되지 않으니**, 가이드가 바뀌면 최신본을 다시 받아 올려주세요.
+
+원본: https://github.com/w-island/style-guide
+자동 생성본이라 이 파일을 직접 고치면 다음 빌드에서 덮어써집니다.
+
+---
+
+# 더블유아일랜드 디자인 시스템
+
+더블유아일랜드 사내 도구의 화면을 만들거나 고칠 때, 모든 직군(디자이너·MD·CS·물류·경영·회계·지원팀)이 **같은 기준으로 일관된 경험**을 받도록 하기 위한 가이드입니다. 시각 자료의 원본은 스타일 가이드 사이트(https://w-island.github.io/style-guide/)에 있어요. 색상 칩·아이콘·컴포넌트를 눈으로 확인하려면 그 사이트를 열면 됩니다.
+
+## 이 스킬을 쓰는 법 (워크플로)
+
+UI 작업이 들어오면 다음 순서로 진행하세요.
+
+1. **토큰부터 확인.** 색을 직접 hex로 박지 말고, 항상 의미 토큰(semantic token)을 씁니다. 그래야 다크 모드가 자동으로 따라와요. 토큰 정의는 `references/tokens.md`를 읽으세요.
+2. **컴포넌트는 패턴 재사용.** 버튼·입력창·리스트·뱃지·탭·토글은 정해진 패턴이 있습니다. 새로 디자인하지 말고 `references/components.md`의 패턴을 가져다 쓰세요.
+3. **문구는 해요체 6원칙.** 버튼 라벨, 안내문, 에러 메시지 등 모든 글자는 `references/ux-writing.md`의 규칙을 따릅니다.
+4. **기존 코드 존중.** ai-hub의 `style.css`에 이미 변수/클래스가 있으면 그걸 우선 따르고, 없을 때만 이 토큰을 추가하세요. 토큰 이름과 값이 충돌하면 사용자에게 알려주세요.
+
+### 이미 디자인 토큰 시스템이 있는 앱에 적용할 때 (예: AI Hub)
+대상 앱이 이미 의미 토큰(`--accent`, `--bg`, `--text-*` 등)과 컴포넌트 클래스(`.btn-primary`, `.switch` 등)를 갖고 있고 화면을 JS로 렌더링한다면, **컴포넌트 CSS를 그대로 붙여넣지 마세요.** 클래스가 충돌해 기존 UI가 깨지고, 정적으로 삽입한 마크업은 JS 렌더링에 덮어쓰여 사라집니다.
+
+대신 **앱의 기존 토큰 "값"을 디자인 시스템 팔레트로 리매핑**하세요. 마크업·JS를 건드리지 않고 `:root` / `[data-theme="dark"]`의 변수 값만 바꾸면 앱 전체가 한 번에 정렬됩니다. 매핑 예: `--accent → blue-500 (#1577cc)`, `--text-primary → gray-1000`, `--danger → status-negative (#d6173a)`. 적용 전 충돌하는 토큰(특히 액센트)은 사용자에게 먼저 알리고, 다크 모드 값은 가독성을 위해 한두 단계 밝은 blue를 쓰세요.
+
+핵심 원칙은 아래에 요약돼 있습니다. **구체적인 값과 패턴이 필요할 때만** 참조 파일을 여세요(컨텍스트 절약).
+
+## 핵심 원칙 (요약)
+
+### 1. 색은 의미 토큰으로
+- UI 메인색은 **Deep Azure (blue-500 = `#1577cc`)** — 차분하고 흰 글씨 대비가 좋아 버튼·링크·선택 상태에 씁니다. 밝은 로고색 **`#1da4ff`는 blue-400(브랜드 하이라이트)** 로 로고·강조에만.
+- 보조(서포팅)는 **토스 스타일 중립 그레이 표면** — 페이지 `#f9fafb`, 카드 `#ffffff`, hover `#f2f4f6`. 크림 등 따뜻한 색은 쓰지 않아요.
+- 텍스트·배경·경계선은 `txt-*`, `bg-*`, `border-*` 의미 토큰을 씁니다. raw gray/hex 직접 사용 금지.
+- **배경은 차분한 중립 그레이로.** 누런/따뜻한 톤을 표면에 깔면 탁해지니 주의. (구조: `references/tokens.md`)
+- **다크 모드는 눈이 편안하게**: 순흑/순백 대신 따뜻한 차콜 배경 + 오프화이트 텍스트(`#ECEAE3`) + 밝은 페리윙클 블루 액센트.
+- 상태색: 성공 `#3BCC4B`, 실패 `#d6173a`. 서브 컬러는 쓰지 않습니다.
+
+### 2. 타이포는 Pretendard
+- 서체는 **Pretendard** 한 가지. 8단계 스케일(Display→Caption)을 쓰고, 임의 크기/굵기를 만들지 않습니다.
+- 본문 16px·줄간 1.6 기준, 제목은 700 굵기. 표는 `references/tokens.md`.
+
+### 3. 아이콘은 라인 스타일
+- 기본 **라인(선) 스타일**, 끝과 꺾임은 **둥글게(round)**. 주목·인터랙션이 필요할 때만 Fill.
+- 24×24 그리드, 두께 Bold 1.8px / Normal 1.3px. 기본 크기 24(L), 범위 XS12·S16·M20·L24·XL28.
+- 이름은 kebab-case 또는 camelCase, 기능 기준(`search`, `share`)·없으면 형태 기준(`chevron-down`).
+- 준비된 100+ 아이콘 셋은 `design-system.html`의 Iconography 섹션에 SVG path로 있습니다. 새 아이콘이 필요하면 같은 규칙(line·round·24그리드)으로 그립니다.
+
+### 4. 레이아웃은 4px 그리드
+- 간격은 4의 배수(2·4·8·12·16·20·24·32·40·48). 모바일 화면은 가로 375px 기준.
+- 컴포넌트 모서리는 둥글게(sm 8 / md 12 / lg 16 / xl 20 / full). 단, **아이콘 내부** radius는 0–2px 별도 규칙.
+
+### 5. 컴포넌트는 정해진 패턴
+- **버튼**: 한 화면에 Primary(SAPPHIRE)는 하나만. 나머지는 Secondary/Outline/Ghost. (패턴: `references/components.md`)
+- **입력창**: 라벨은 항상 위, 포커스는 blue-500, 에러는 status-negative + "무엇을 고칠지" 안내.
+- **리스트/뱃지/탭/토글**: 패턴 그대로 사용.
+
+### 6. 문구는 해요체 6원칙
+한 줄 요약 — 자세한 규칙과 예시는 `references/ux-writing.md`:
+1. **해요체로 통일** ("저장했어요")
+2. **쉬운 말** (영어·약어·전문용어 풀어쓰기 — 전 직군이 봄)
+3. **능동형** ("확인했어요")
+4. **긍정형** ("~하면 쓸 수 있어요", 다이얼로그 왼쪽 버튼은 항상 `닫기`)
+5. **캐주얼한 경어** ("입력할래요?")
+6. **명사 → 동사** ("파일을 올리고 있어요")
+
+## UX 원칙 (답답하지 않은 화면)
+사내 도구라도 사용자를 가두거나 속이지 않습니다: ①진입 직후 화면 가로막기 금지 ②뒤로가기 막기 금지 ③거절 경로 항상 제공 ④예상 밖 전면 노출 금지 ⑤버튼 라벨은 결과가 보이게. (상세: `references/ux-writing.md`)
+
+## 참조 파일
+- `references/tokens.md` — 컬러(SAPPHIRE·그레이·투명도) · 의미 토큰(text/bg/border/status/diff) · 타이포 스케일 · 바로 붙여넣는 CSS `:root` 블록
+- `references/components.md` — 버튼·입력창·리스트로우·뱃지·탭·토글·캘린더 + 로고 락업·GNB/LNB 내비게이션(카테고리 정렬 원칙)의 HTML/CSS 패턴
+- `references/ux-writing.md` — 해요체 6원칙 Before/After + UX 5원칙
+- 스타일 가이드 사이트 https://w-island.github.io/style-guide/ — 전체를 눈으로 보는 비주얼 레퍼런스
+
+---
+
+# 디자인 토큰
+
+색은 **의미 토큰(semantic token)** 으로만 쓰세요. raw 컬러를 직접 박으면 다크 모드가 깨집니다. 의미 토큰은 그레이 스케일 위에서 자동 계산되고, 그레이 스케일은 라이트/다크에서 서로 매칭되도록 정의돼 있어요.
+
+## 목차
+1. Primary (SAPPHIRE)
+2. Grayscale (Light / Dark)
+3. Transparency
+4. Status / Diff
+5. Semantic tokens (text / bg / border)
+6. Typography
+7. Spacing / Radius
+8. 바로 붙여넣는 CSS `:root` 블록
+
+---
+
+## 1. Primary · W-ISLAND Blue (Deep Azure)
+UI 메인은 **500 (`#1577cc`)** — 차분하고 흰 글씨 대비가 좋아 버튼·링크·선택 상태에 씁니다. 밝은 로고색 **`#1DA4FF`는 400(브랜드 하이라이트)** 로 살려 로고·강조 포인트에만.
+
+| 단계 | HEX | 단계 | HEX |
+|---|---|---|---|
+| 50 | `#ebf5fd` | 500 | `#1577cc` ← 기본(UI) |
+| 100 | `#cce6fa` | 600 | `#1166b0` |
+| 200 | `#9fd0f4` | 700 | `#0e5390` |
+| 300 | `#5cb4ee` | 800 | `#0b4172` |
+| 400 | `#1da4ff` (로고) | 900 | `#093356` |
+
+### Secondary · Neutral Gray (Toss 스타일)
+보조(서포팅) 톤. **라이트 모드의 배경/표면**에 토스 스타일의 차분한 **중립 그레이**를 씁니다. 포인트는 W-ISLAND Blue가 담당. (크림 등 따뜻한 색은 쓰지 않아요.)
+
+| 토큰 | HEX | 용도 |
+|---|---|---|
+| white | `#ffffff` | 카드 표면 |
+| bg | `#f9fafb` | 페이지 배경 |
+| hover | `#f2f4f6` | hover·3차 표면 |
+| border | `#e5e8eb` | 기본 보더 |
+| strong | `#d1d6db` | 강한 보더 |
+
+## 2. Grayscale (중립 — 텍스트·보더·중간톤)
+라이트는 중립 회색, 다크는 **토스 스타일 차콜**(완전 블랙 대신 살짝 뜬 톤). 표면(배경)은 그레이가 아니라 아래 Surface 토큰을 씁니다.
+
+| 단계 | Light | Dark | 단계 | Light | Dark |
+|---|---|---|---|---|---|
+| 50 | `#f9f9fa` | `#17171c` | 600 | `#b1b1bb` | `#8b95a1` |
+| 100 | `#ececf0` | `#202028` | 700 | `#8a8a92` | `#a9adb8` |
+| 200 | `#e3e3e8` | `#292932` | 800 | `#6b6b71` | `#c2c5cc` |
+| 300 | `#d6d7de` | `#3c3c46` | 900 | `#515256` | `#e3e4e8` |
+| 400 | `#cecfd7` | `#4e4e5a` | 1000 | `#2A2C2F` | `#f3f4f6` |
+| 500 | `#c2c3cd` | `#6b6b78` | | | |
+
+### Surface (배경 전용)
+| 토큰 | Light | Dark | 용도 |
+|---|---|---|---|
+| `--surface-1` | `#ffffff` | `#202028` | 카드·표면 (bg-primary) |
+| `--surface-2` | `#f9fafb` | `#17171c` | 페이지 배경 (bg-secondary) |
+| `--surface-3` | `#f2f4f6` | `#292932` | 3차 표면 (bg-tertiary) |
+
+## 3. Transparency
+기준색 `#2A2C2F`에 opacity를 조절(0·5·10·20·30·40·50·60·70·80·90·100%). 경계선·딤드 배경 등에 사용. 의미 토큰에서는 gray-1000에 opacity를 곱해 자동 생성합니다.
+
+## 4. Status / Diff
+| 토큰 | 값 | 용도 |
+|---|---|---|
+| status-positive | `#3BCC4B` | 성공·긍정 |
+| status-negative | `#d6173a` | 오류·실패, Input 실패 |
+| status-warning | `#e8920c` | 주의 (Alert/검증 등 기능용 — 장식용 아님) |
+| diff-add (light) | bg `#c5fad7` / txt `#00693d` | 추가된 부분 |
+| diff-add (dark) | bg `#065433` / txt `#b4dac5` | 추가된 부분 |
+| diff-remove (light) | bg `#ffc9c7` / txt `#b4002b` | 삭제된 부분 |
+| diff-remove (dark) | bg `#650205` / txt `#fbbac6` | 삭제된 부분 |
+
+> 서브 컬러(Neon Orange / Yellow)는 이 사내 도구군에서는 **사용하지 않습니다.**
+
+## 5. Semantic tokens
+gray-1000(=라이트 `#2A2C2F`, 다크 `#F6F6F6`)에 opacity를 곱해 텍스트/경계선을 만들고, bg는 그레이 단계를 직접 매핑합니다.
+
+| 토큰 | 값 | 용도 |
+|---|---|---|
+| `--txt-primary` | gray-1000 · 100% | 기본 텍스트·아이콘 |
+| `--txt-secondary` | gray-1000 · 80% | 보조/강조 텍스트 |
+| `--txt-tertiary` | gray-1000 · 60% | 보조 텍스트 |
+| `--txt-caption` | gray-1000 · 50% | 캡션 |
+| `--txt-disabled` | gray-1000 · 30% | 비활성 |
+| `--txt-link` | `#1f7a8c` (다크 `#5ec8d2`) | 링크 |
+| `--txt-blue-primary` | blue-500 | 강조 텍스트 |
+| `--txt-blue-secondary` | blue-400 | 강조 텍스트(보조) |
+| `--bg-primary` | surface-1 (#ffffff / 다크 #202028) | 카드·표면 |
+| `--bg-secondary` | surface-2 (#f9fafb / 다크 #17171c) | 페이지 배경 |
+| `--bg-tertiary` | surface-3 (#f2f4f6 / 다크 #292932) | 3차 표면 |
+| `--bg-invert` | `#2A2C2F` (다크 `#ECEAE3`) | 반전 배경(토스트 등) |
+| `--bg-blue-primary` | blue-100 (다크 blue-800) | 강조 배경 |
+| `--border-primary` | gray-1000 | 강한 경계선 |
+| `--border-secondary` | gray-1000 · 20% | 기본 경계선 |
+| `--border-tertiary` | gray-1000 · 10% | 약한 경계선 |
+
+## 6. Typography
+서체는 **Pretendard** 단일. (`https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css`)
+
+| 단계 | 크기 | 굵기 | 줄간 | 용도 |
+|---|---|---|---|---|
+| Display | 36px | 700 | 1.25 | 가장 큰 타이틀 |
+| Title 1 | 28px | 700 | 1.3 | 화면 제목 |
+| Title 2 | 22px | 700 | 1.35 | 섹션 제목 |
+| Heading | 18px | 600 | 1.45 | 카드/그룹 제목 |
+| Body 1 | 16px | 400 | 1.6 | 본문 기본 |
+| Body 2 | 14px | 400 | 1.6 | 보조 본문 |
+| Label | 14px | 600 | 1.4 | 버튼·라벨 |
+| Caption | 12px | 400 | 1.5 | 캡션·메타 |
+
+## 7. Spacing / Radius / Shadow
+- **Spacing(4px 그리드):** 2 · 4 · 8 · 12 · 16 · 20 · 24 · 32 · 40 · 48
+- **Radius:** sm `8px` · md `12px` · lg `16px` · xl `20px` · full `999px` (아이콘 내부는 0–2px 별도)
+
+### Shadow · Elevation (토스 스타일 — 부드럽고 옅게)
+| 토큰 | Light | Dark | 용도 |
+|---|---|---|---|
+| `--shadow-sm` | `0 1px 3px rgba(0,0,0,.06)` | `…,.4)` | 카드 |
+| `--shadow-md` | `0 4px 12px rgba(0,0,0,.08)` | `…,.45)` | 팝오버·셀렉트·캘린더 |
+| `--shadow-lg` | `0 10px 28px rgba(0,0,0,.10)` | `…,.5)` | 드롭다운·바텀시트 |
+| `--shadow-xl` | `0 20px 48px rgba(0,0,0,.14)` | `…,.6)` | 모달·다이얼로그 |
+
+> 그림자는 진하게 쓰지 말고 **경계선(border-tertiary)과 함께 옅게** 써서 "살짝 떠 있는" 느낌만 줘요.
+
+### Motion
+- 이징 `cubic-bezier(.2,.8,.2,1)` · 길이 fast `0.12s`(hover) · base `0.18s`(기본) · slow `0.28s`(시트·모달).
+- 과한 bounce·1초+ 애니메이션 금지. 1초 넘는 작업엔 스피너/스켈레톤.
+
+### Breakpoints (모바일 우선 · 기준 375px)
+- Mobile `≤ 599px` · Tablet `600–1023px` · Desktop `≥ 1024px`
+
+### 접근성(A11y) 최소 기준
+- 대비 본문 4.5:1 / 큰 글씨·아이콘 3:1 · 포커스 링 항상 노출(outline 제거 금지) · 터치 영역 44×44 · 색만으로 정보 전달 금지(아이콘·텍스트 병행) · 키보드로 모든 동작(모달 esc).
+
+## 8. 바로 붙여넣는 CSS `:root` 블록
+새 화면/파일에 디자인 시스템을 적용할 때 이 블록을 그대로 넣고, 의미 토큰만 참조하세요. `data-theme` 속성으로 라이트/다크를 전환합니다.
+
+```css
+:root {
+  /* Primary — W-ISLAND Blue: UI=Deep Azure 500, 로고색=400(#1da4ff) */
+  --blue-50:#ebf5fd; --blue-100:#cce6fa; --blue-200:#9fd0f4; --blue-300:#5cb4ee;
+  --blue-400:#1da4ff; --blue-500:#1577cc; --blue-600:#1166b0; --blue-700:#0e5390;
+  --blue-800:#0b4172; --blue-900:#093356;
+  --status-positive:#3BCC4B; --status-negative:#d6173a; --status-warning:#e8920c;
+  --diff-add-bg:#c5fad7; --diff-add-txt:#00693d;
+  --diff-remove-bg:#ffc9c7; --diff-remove-txt:#b4002b;
+}
+[data-theme="light"] {
+  /* 중립 그레이 (텍스트·보더) */
+  --gray-50:#f9f9fa; --gray-100:#ececf0; --gray-200:#e3e3e8; --gray-300:#d6d7de;
+  --gray-400:#cecfd7; --gray-500:#c2c3cd; --gray-600:#b1b1bb; --gray-700:#8a8a92;
+  --gray-800:#6b6b71; --gray-900:#515256; --gray-1000:#2A2C2F;
+  --g1000-rgb:42,44,47;
+  /* 표면 = 토스 스타일 중립 그레이 */
+  --surface-1:#ffffff; --surface-2:#f9fafb; --surface-3:#f2f4f6;
+  --txt-link:#1f7a8c; --bg-invert:#2A2C2F; --bg-blue-primary:#cce6fa;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06); --shadow-md:0 4px 12px rgba(0,0,0,.08);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.10); --shadow-xl:0 20px 48px rgba(0,0,0,.14);
+}
+[data-theme="dark"] {
+  /* 토스 스타일 다크 (완전 블랙 대신 살짝 뜬 차콜) */
+  --gray-50:#17171c; --gray-100:#202028; --gray-200:#292932; --gray-300:#3c3c46;
+  --gray-400:#4e4e5a; --gray-500:#6b6b78; --gray-600:#8b95a1; --gray-700:#a9adb8;
+  --gray-800:#c2c5cc; --gray-900:#e3e4e8; --gray-1000:#f3f4f6;
+  --g1000-rgb:243,244,246;
+  --surface-1:#202028; --surface-2:#17171c; --surface-3:#292932;
+  --txt-link:#5ec8d2; --bg-invert:#f3f4f6; --bg-blue-primary:#0b4172;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.4); --shadow-md:0 4px 12px rgba(0,0,0,.45);
+  --shadow-lg:0 10px 28px rgba(0,0,0,.5); --shadow-xl:0 20px 48px rgba(0,0,0,.6);
+}
+:root {
+  --txt-primary:rgba(var(--g1000-rgb),1);   --txt-secondary:rgba(var(--g1000-rgb),.80);
+  --txt-tertiary:rgba(var(--g1000-rgb),.60); --txt-caption:rgba(var(--g1000-rgb),.50);
+  --txt-disabled:rgba(var(--g1000-rgb),.30);
+  --txt-blue-primary:var(--blue-500); --txt-blue-secondary:var(--blue-400);
+  --bg-primary:var(--surface-1); --bg-secondary:var(--surface-2); --bg-tertiary:var(--surface-3);
+  --border-primary:var(--gray-1000);
+  --border-secondary:rgba(var(--g1000-rgb),.20); --border-tertiary:rgba(var(--g1000-rgb),.10);
+}
+```
+
+---
+
 # 컴포넌트 패턴
 
 이미 의미 토큰이 정의돼 있다는 전제(`tokens.md`)로, 그 위에서 쓰는 컴포넌트 패턴입니다. 새로 디자인하지 말고 이 패턴을 가져다 쓰세요. 모든 컴포넌트는 의미 토큰을 참조하므로 다크 모드가 자동으로 따라옵니다.
@@ -348,3 +616,74 @@ hover 시 뜨는 짧은 한 줄 도움말. `bg-invert` 말풍선 + `--shadow-md`
 - inline SVG, `viewBox="0 0 24 24"`, `fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"`.
 - 색은 `currentColor`로 두고 부모의 텍스트 색(`--txt-*`)을 상속받게 합니다.
 - 준비된 100+ path는 `design-system.html`의 `ICON_GROUPS`/`ICON_MORE` 객체에서 가져오세요.
+
+---
+
+# UX 라이팅 & UX 원칙
+
+제품 안의 모든 글자(버튼 라벨·안내문·에러·빈 화면·메뉴 이름)에 적용합니다. 핵심 전제: **사내 전 직군(디자이너·MD·CS·물류·경영·회계·지원팀)이 한 번에 이해할 수 있는 말**이 기준이에요. 친근함보다 "누가 봐도 바로 이해"가 우선입니다.
+
+## 6대 원칙
+
+### 1. 해요체로 통일
+상황 불문 해요체. "저장됨", "저장하시겠습니까?" → **"저장했어요"**
+
+### 2. 쉬운 말로
+직군마다 익숙한 용어가 다릅니다. 영어·약어·전문용어를 풀어 쓰세요.
+
+| 이렇게 ✗ | 이렇게 ✓ |
+|---|---|
+| 업로드 컴플리트 | 올리기 완료했어요 |
+| 싱크 | 동기화했어요 |
+| 어카운트 | 계정 |
+| Confirm | 확인 |
+
+### 3. 능동형
+| ✗ | ✓ |
+|---|---|
+| 확인되었어요 | 확인했어요 |
+| 등록되었습니다 | 등록했어요 |
+| 처리 완료됨 | 처리했어요 |
+
+### 4. 긍정형
+"무엇이 안 된다"보다 "어떻게 하면 된다"를 알려줍니다.
+
+| ✗ | ✓ |
+|---|---|
+| 권한이 없어요 | 관리자에게 요청하면 쓸 수 있어요 |
+| 검색 결과가 없습니다 | 검색 결과를 찾지 못했어요 |
+
+- **다이얼로그 왼쪽 버튼은 항상 `닫기`.** "취소"는 작업이 취소된다는 오해를 줄 수 있어요.
+
+### 5. 캐주얼한 경어
+과한 경어(~시겠어요?, ~께)를 피합니다.
+
+| ✗ | ✓ |
+|---|---|
+| 입력하시겠어요? | 입력할래요? |
+| ~께 전달 | ~에게 전달 |
+| 확인 부탁드립니다 | 확인해 주세요 |
+
+### 6. 명사 → 동사
+명사를 두 개 이상 붙이지 말고 동사로 풉니다.
+
+| ✗ | ✓ |
+|---|---|
+| 파일 업로드 진행 | 파일을 올리고 있어요 |
+| 데이터 동기화 완료 | 데이터를 동기화했어요 |
+
+## 예외 (수동형/부정형이 더 명확할 때)
+규칙을 위한 규칙이 되지 않게, 다음은 예외로 허용합니다.
+- **서비스 종료·기간 만료**: "곧 종료돼요"처럼 수동형이 뉘앙스를 정확히 전달.
+- **사용자 행동의 결과 알림**(연체·해지 등): 인과관계를 명확히.
+- **정책상 불가능**: 부정형으로 명확히 알리되, **안 되는 이유를 함께** 안내.
+- 철자: '되어요'는 모두 '돼요'로 통일.
+
+## UX 원칙 — 답답하지 않은 화면
+사내 도구라도 사용자를 가두거나 속이지 않습니다. 아래는 화면 설계 시 지켜야 할 최소 기준이에요.
+
+1. **진입 직후 화면을 가로막지 않기** — 들어오자마자 팝업·바텀시트로 전면을 막으면 집중이 끊기고 이탈로 이어져요.
+2. **뒤로가기를 막지 않기** — 뒤로가기를 눌렀을 때 팝업으로 이전 화면 이동을 막지 않아요.
+3. **거절 경로 제공** — 한쪽 선택지만 주는 강제 구조 금지. 닫기/거절 경로를 항상 둬요.
+4. **예상 밖 노출 없애기** — 흐름 중 갑작스러운 전면 광고·팝업으로 몰입을 방해하지 않아요.
+5. **버튼 라벨을 명확하게** — 버튼만 보고도 다음에 무슨 일이 일어날지 알 수 있게 써요.

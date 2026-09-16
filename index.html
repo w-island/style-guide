@@ -274,7 +274,8 @@
     /* ---- Button ---- */
     .btn { font-family:inherit; font-weight:600; border:1px solid transparent; border-radius:12px;
       cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px;
-      padding:0 18px; height:48px; font-size:15px; transition:.15s; color:var(--txt-primary); }
+      padding:0 18px; height:48px; font-size:15px; transition:.15s; color:var(--txt-primary);
+      text-decoration:none; white-space:nowrap; }
     .btn.lg { height:54px; font-size:16px; border-radius:14px; padding:0 22px; }
     .btn.sm { height:38px; font-size:13px; border-radius:10px; padding:0 14px; }
     .btn-primary { background:var(--blue-500); color:#fff; }
@@ -1596,6 +1597,27 @@
 claude plugin update wisland-design-system@w-island</pre>
           </div>
 
+          <div class="sub">5. ChatGPT · 다른 AI에서 쓰기</div>
+          <div class="note">위 설치 안내는 Claude Code 전용이에요(플러그인 설치 명령이라 ChatGPT엔 안 먹혀요). 다른 AI에는 <b>기준 문서를 파일로 직접 올려주세요.</b> 토큰·컴포넌트·UX 라이팅을 한 파일로 합쳐뒀어요.</div>
+          <div class="card">
+            <div class="comp-label">ChatGPT 프로젝트에 올려두기 — 한 번만</div>
+            <ol style="padding-left:18px; font-size:14px; color:var(--txt-secondary); display:grid; gap:7px; margin:6px 0 12px;">
+              <li>아래 버튼으로 통합본을 내려받아요.</li>
+              <li>ChatGPT에서 <b>새 프로젝트</b>를 만들고(예: "더블유아일랜드 UI"), 그 파일을 <b>프로젝트 파일</b>로 올려요.</li>
+              <li>프로젝트 <b>지침</b>에 아래 한 줄을 넣어요.</li>
+            </ol>
+            <pre class="cmd" id="gpt-instruction">UI·디자인·문구 작업은 업로드된 더블유아일랜드 디자인 시스템 문서의 값을 그대로 쓴다. 문서에 없는 값은 추측하지 말고 물어본다.</pre>
+            <div class="term-tools" style="margin-top:10px">
+              <a class="btn btn-primary sm" href="wisland-design-system.md" download="더블유아일랜드-디자인시스템.md">통합본 내려받기</a>
+              <button class="btn btn-secondary sm" id="copy-gpt-instruction">지침 문구 복사</button>
+            </div>
+            <div class="note" style="margin:12px 0 0">이러면 그 프로젝트의 <b>모든 대화</b>에 적용돼요. 채팅마다 다시 붙여넣지 않아도 됩니다.</div>
+          </div>
+          <div class="card" style="margin-top:10px">
+            <div class="comp-label">⚠️ 이 파일은 자동으로 갱신되지 않아요</div>
+            <div class="note" style="margin:6px 0 0">Claude 플러그인과 달리 업로드한 파일은 그 시점에 멈춰 있어요. <b>가이드가 바뀌면 새로 받아서 다시 올려주세요.</b> 자동 최신화가 필요하면 Claude Code 쪽(1번)을 쓰세요.</div>
+          </div>
+
           <div class="note" style="margin-top:18px">문의: creative@wisland.co.kr · 레포: github.com/w-island/style-guide</div>
         </section>
 
@@ -2091,6 +2113,8 @@ claude plugin update wisland-design-system@w-island</pre>
         const b=document.getElementById(id); if(!b) return;
         b.addEventListener('click', ()=>{ const p=document.getElementById('install-prompt'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('설치 안내를 복사했어요')); });
       });
+      const gi=document.getElementById('copy-gpt-instruction');
+      if(gi) gi.addEventListener('click', ()=>{ const p=document.getElementById('gpt-instruction'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('지침 문구를 복사했어요')); });
       if(!btn) return; btn.addEventListener('click', playTerm); playTerm();
     }
 

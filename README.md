@@ -41,11 +41,30 @@ claude plugin marketplace update w-island
 claude plugin update wisland-design-system@w-island
 ```
 
+## 🤖 ChatGPT · 다른 AI에서 쓰기
+
+위 설치 블록은 Claude Code 전용이에요(플러그인 설치 명령이라 ChatGPT엔 안 먹혀요).
+다른 AI에는 기준 문서를 **파일로 직접** 올려주세요. 한 파일로 합쳐둔 통합본이 있어요.
+
+**[⬇ wisland-design-system.md 내려받기](https://w-island.github.io/style-guide/wisland-design-system.md)**
+
+1. 위 파일을 받아요.
+2. ChatGPT에서 **새 프로젝트**를 만들고(예: "더블유아일랜드 UI"), 그 파일을 **프로젝트 파일**로 올려요.
+3. 프로젝트 **지침**에 한 줄:
+   > UI·디자인·문구 작업은 업로드된 더블유아일랜드 디자인 시스템 문서의 값을 그대로 쓴다. 문서에 없는 값은 추측하지 말고 물어본다.
+
+그 프로젝트의 모든 대화에 적용돼요. 채팅마다 다시 붙여넣지 않아도 됩니다.
+
+> ⚠️ **이 파일은 자동 갱신되지 않아요.** 업로드한 파일은 그 시점에 멈춰 있습니다.
+> 가이드가 바뀌면 새로 받아서 다시 올려주세요. 자동 최신화가 필요하면 Claude Code 쪽을 쓰세요.
+
 ## 📁 구성
 ```
 index.html                          # 디자인 시스템 가이드 (GitHub Pages)
+wisland-design-system.md            # 외부 AI용 통합본 (자동 생성 — 직접 고치지 마세요)
 .claude-plugin/marketplace.json     # 마켓플레이스 "w-island"
 plugins/wisland-design-system/      # 플러그인 (plugin.json + 스킬 번들)
+scripts/                            # 동기화 검사 · 통합본 빌드
 ```
 
 ## ✏️ 수정 방법
@@ -53,11 +72,17 @@ plugins/wisland-design-system/      # 플러그인 (plugin.json + 스킬 번들)
 
 > `index.html`은 사람이 보는 화면, `references/*.md`는 AI가 읽는 문서 — **같은 시스템의 두 벌**이라 한쪽만 고치면 팀원의 AI가 낡은 값으로 작업하게 됩니다.
 
+스킬 문서를 고쳤다면 **외부 AI용 통합본도 다시 빌드**하고 함께 커밋하세요:
+```
+node scripts/build-bundle.mjs
+```
+
 두 벌이 어긋나지 않았는지 검사:
 ```
 node scripts/check-sync.mjs
 ```
-push하면 GitHub Actions에서도 자동으로 돌아요. 어긋난 값이 있으면 어디가 다른지 알려주고 실패합니다.
+push하면 GitHub Actions에서 위 두 가지(값 대조 + 통합본 최신 여부)가 자동으로 돌아요.
+어긋나면 어디가 다른지 알려주고 실패합니다.
 의도적으로 달라야 하는 값은 `scripts/check-sync.mjs`의 `ALLOWED`에 추가하세요.
 
 ---
