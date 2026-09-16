@@ -10,7 +10,7 @@
   cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:6px;
   padding:0 18px; height:48px; font-size:15px; transition:.15s; color:var(--txt-primary); }
 .btn.lg { height:54px; font-size:16px; border-radius:14px; padding:0 22px; }
-.btn.sm { height:38px; font-size:13.5px; border-radius:10px; padding:0 14px; }
+.btn.sm { height:38px; font-size:13px; border-radius:10px; padding:0 14px; }
 .btn-primary { background:var(--blue-500); color:#fff; }
 .btn-primary:hover { background:var(--blue-600); }
 .btn-secondary { background:var(--bg-tertiary); }
@@ -27,6 +27,8 @@
 규칙: 라벨은 항상 입력칸 **위**. 포커스는 blue-500, 에러는 status-negative + "무엇을 고칠지" 헬퍼 텍스트.
 
 ```css
+.field { width:240px; max-width:100%; min-width:0; }  /* min-width:0 — flex 안에서 네이티브 입력이 넘치는 것 방지 */
+.field .file-input { max-width:100%; }
 .field label { display:block; font-size:13px; font-weight:600; margin-bottom:7px; color:var(--txt-secondary); }
 .field input { width:100%; font-family:inherit; font-size:15px; color:var(--txt-primary);
   background:var(--bg-primary); border:1.5px solid var(--border-secondary); border-radius:12px;
@@ -34,7 +36,7 @@
 .field input::placeholder { color:var(--txt-disabled); }
 .field input:focus { border-color:var(--blue-500); }
 .field.error input { border-color:var(--status-negative); }
-.field .help { font-size:12.5px; margin-top:7px; color:var(--txt-tertiary); }
+.field .help { font-size:12px; margin-top:7px; color:var(--txt-tertiary); }
 .field.error .help { color:var(--status-negative); }
 .field input:disabled { background:var(--bg-tertiary); color:var(--txt-disabled); }
 ```
@@ -62,7 +64,7 @@
 상태 표시용 알약(pill). blue=신규/강조, pos=성공, neg=실패, gray=대기.
 
 ```css
-.badge { display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700;
+.badge { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:700;
   padding:4px 11px; border-radius:999px; }
 .badge.blue { background:color-mix(in srgb, var(--blue-500) 16%, var(--bg-primary)); color:var(--txt-blue-primary); }
 .badge.pos { background:color-mix(in srgb, var(--status-positive) 18%, var(--bg-primary)); color:var(--status-positive); }
@@ -76,7 +78,7 @@
 
 ```css
 .tabs { display:flex; gap:4px; border-bottom:1.5px solid var(--border-tertiary); }
-.tabs button { font-family:inherit; font-size:14.5px; font-weight:600; color:var(--txt-tertiary);
+.tabs button { font-family:inherit; font-size:14px; font-weight:600; color:var(--txt-tertiary);
   background:none; border:none; cursor:pointer; padding:12px 16px; position:relative; }
 .tabs button.active { color:var(--txt-blue-primary); }
 .tabs button.active::after { content:''; position:absolute; left:12px; right:12px; bottom:-1.5px;
@@ -84,7 +86,7 @@
 [data-theme="dark"] .tabs button.active { color:var(--blue-200); }
 
 .seg { display:inline-flex; background:var(--bg-tertiary); border-radius:10px; padding:3px; }
-.seg button { font-family:inherit; font-size:13.5px; font-weight:600; border:none; cursor:pointer;
+.seg button { font-family:inherit; font-size:13px; font-weight:600; border:none; cursor:pointer;
   background:none; color:var(--txt-secondary); padding:8px 16px; border-radius:8px; }
 .seg button.active { background:var(--bg-primary); color:var(--txt-primary); box-shadow:0 1px 3px rgba(0,0,0,.12); }
 ```
@@ -146,7 +148,7 @@
   box-shadow:var(--shadow-xl); padding:8px 22px 26px; z-index:51; }
 .sheet-handle { width:40px; height:4px; border-radius:999px; background:var(--gray-300); margin:8px auto 16px; }
 .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%);
-  background:var(--bg-invert); color:var(--gray-50); font-weight:600; padding:12px 20px;
+  background:var(--bg-invert); color:var(--gray-50); font-size:13px; font-weight:600; padding:11px 20px;
   border-radius:999px; box-shadow:var(--shadow-lg); }  /* 다크: color:var(--gray-1000) */
 ```
 
@@ -188,7 +190,7 @@ Text Field(위 참고) + 드롭다운/체크/라디오. 라벨 위, 필수 `*`�
 .dropdown.open .dd-chev { transform:rotate(180deg); }
 .dd-menu { position:absolute; top:calc(100% + 6px); left:0; right:0; z-index:20; list-style:none; margin:0; padding:6px;
   background:var(--bg-primary); border:1px solid var(--border-tertiary); border-radius:12px; box-shadow:var(--shadow-lg); }
-.dd-opt { font-size:14.5px; color:var(--txt-secondary); padding:10px 12px; border-radius:8px; cursor:pointer; }
+.dd-opt { font-size:14px; color:var(--txt-secondary); padding:10px 12px; border-radius:8px; cursor:pointer; }
 .dd-opt:hover { background:var(--bg-tertiary); color:var(--txt-primary); }
 .dd-opt.selected { background:var(--bg-blue-primary); color:var(--txt-blue-primary); font-weight:600; } /* 다크: var(--blue-200) */
 /* 체크/라디오는 네이티브로 충분 — accent-color만 지정 */
@@ -218,7 +220,7 @@ input[type=file].file-input::file-selector-button:hover { border-color:var(--blu
 ## Alert · Banner
 화면 내 상태 배너 4종(info/success/warn/error). 토스트(자동 사라짐)와 달리 사용자가 닫기 전까지 유지.
 ```css
-.alert { display:flex; gap:10px; padding:13px 15px; border-radius:12px; font-size:13.5px; align-items:flex-start; }
+.alert { display:flex; gap:10px; padding:13px 15px; border-radius:12px; font-size:13px; align-items:flex-start; }
 .alert.info { background:var(--bg-blue-primary); color:var(--txt-blue-primary); }      /* 다크: var(--blue-200) */
 .alert.success { background:color-mix(in srgb,var(--status-positive) 16%,var(--bg-primary)); color:var(--status-positive); }
 .alert.warn { background:color-mix(in srgb,var(--status-warning) 18%,var(--bg-primary)); color:#9a6206; } /* 다크: #f0b35a */
