@@ -1522,28 +1522,27 @@
           </div>
           <div class="term-tools">
             <button class="btn btn-primary sm" id="term-play">▶ 재생</button>
-            <button class="btn btn-secondary sm" data-copy="/plugin marketplace add w-island/style-guide">① 마켓 등록 복사</button>
-            <button class="btn btn-secondary sm" data-copy="/plugin install wisland-design-system@w-island">② 설치 복사</button>
-            <button class="btn btn-secondary sm" data-copy="/wisland-design-system:apply 전체">③ 전체 적용 복사</button>
+            <button class="btn btn-secondary sm" id="copy-install-prompt">① 설치 안내 복사</button>
+            <button class="btn btn-secondary sm" data-copy="/wisland-design-system:apply 전체">② 전체 적용 복사</button>
           </div>
 
-          <div class="sub">1. 설치 — 한 번만</div>
-          <div class="note"><b>⚠️ OS 터미널(cmd·PowerShell)이 아니에요.</b> 아래 <code>/명령</code>은 <b>Claude Code 대화 입력창</b>(평소 Claude에게 말 거는 그 칸)에 입력해요. VS Code 확장 · 데스크탑 앱 · 터미널 CLI 모두 같은 방식이에요.</div>
-          <div class="card"><pre class="cmd"><span class="c"># Claude Code 입력창에 한 줄씩 입력</span>
-/plugin marketplace add w-island/style-guide
-/plugin install wisland-design-system@w-island
-<span class="c"># 바로 활성화 (세션 새로 시작 대신)</span>
-/reload-plugins</pre></div>
+          <div class="sub">1. 설치 — 붙여넣기 한 번</div>
+          <div class="note">명령어를 외울 필요 없어요. <b>Claude Code 대화 입력창</b>(평소 Claude에게 말 거는 그 칸)에 아래 문단을 <b>통째로 붙여넣고 엔터</b>하면, 마켓 등록 · 설치 · 자동 최신화 설정까지 Claude가 알아서 합니다. VS Code 확장 · 데스크탑 앱 · 터미널 CLI 모두 같은 방식이에요.</div>
+          <div class="card">
+            <pre class="cmd" id="install-prompt">더블유아일랜드 디자인 시스템 플러그인을 설치해줘. 순서대로 해줘.
 
-          <div class="card" style="margin-top:10px">
-            <div class="comp-label">메뉴(GUI)로 설치 — 명령 외우기 싫을 때</div>
-            <ol style="padding-left:18px; font-size:14px; color:var(--txt-secondary); display:grid; gap:7px; margin:6px 0 0;">
-              <li>입력창에 <code>/plugin</code> 입력 → 탭 메뉴가 떠요 (<b>Tab</b> 키로 탭 이동, 방향키+Enter로 선택).</li>
-              <li><b>Marketplaces</b> 탭 → "마켓플레이스 추가" → <code>w-island/style-guide</code> 입력</li>
-              <li><b>Discover</b> 탭 → <code>wisland-design-system</code> 선택 → 스코프 고르고 설치 (기본 <b>User</b> = 내 모든 프로젝트)</li>
-              <li><b>Installed</b> 탭에서 enabled 확인. 안 켜지면 <code>/reload-plugins</code></li>
-            </ol>
+1. 터미널에서 `claude plugin marketplace add w-island/style-guide` 실행
+   (이미 등록돼 있다는 메시지가 나오면 그냥 다음 단계로)
+2. 터미널에서 `claude plugin install wisland-design-system@w-island` 실행
+3. ~/.claude/settings.json 을 읽고, 기존 내용을 지우지 말고 아래 두 항목만 병합해줘.
+   이미 있으면 값만 맞춰줘.
+   - extraKnownMarketplaces 에 "w-island" 키:
+     { "source": { "source": "github", "repo": "w-island/style-guide" }, "autoUpdate": true }
+   - enabledPlugins 에 "wisland-design-system@w-island": true
+4. settings.json 이 유효한 JSON인지 확인하고, 설치된 플러그인 버전을 알려줘.</pre>
+            <div class="term-tools" style="margin-top:10px"><button class="btn btn-primary sm" id="copy-install-prompt-2">설치 안내 복사</button></div>
           </div>
+          <div class="note" style="margin-top:10px">끝나면 <b>Claude Code를 한 번 껐다 켜주세요.</b> 플러그인은 재시작해야 적용돼요.</div>
 
           <div class="sub">2. 사용 — 그냥 말하면 돼요</div>
           <div class="note">스킬 이름을 외울 필요 없어요. UI/디자인 작업을 부탁하면 Claude가 알아서 이 디자인 시스템을 적용해요.</div>
@@ -1585,10 +1584,17 @@
             <div class="term-tools" style="margin-top:10px"><button class="btn btn-primary sm" id="copy-apply-prompt">적용 프롬프트 복사</button></div>
           </div>
 
-          <div class="sub">4. 업데이트</div>
-          <div class="note">디자인 시스템이 바뀌면 최신으로 당겨오세요.</div>
-          <div class="card"><pre class="cmd">/plugin marketplace update w-island
-/plugin update wisland-design-system@w-island</pre></div>
+          <div class="sub">4. 업데이트 — 자동</div>
+          <div class="note">위 설치 안내의 <b>3번(autoUpdate)</b>을 했다면 따로 할 게 없어요. Claude Code를 켤 때마다 알아서 최신 가이드로 맞춰집니다.</div>
+          <div class="card">
+            <div class="comp-label">⚠️ 3번을 건너뛰면 가이드가 바뀌어도 내 Claude는 옛날 값을 계속 씁니다</div>
+            <div class="note" style="margin:6px 0 0">플러그인은 <b>설치 시점의 복사본을 캐시</b>하고, 낡아도 알려주지 않아요. 실제로 3개월 뒤처진 채 작업하다 새로 생긴 <code>/apply</code> 커맨드가 아예 없던 사례가 있었습니다.</div>
+          </div>
+          <div class="card" style="margin-top:10px">
+            <div class="comp-label">지금 당장 최신화하고 싶을 때</div>
+            <pre class="cmd" style="margin-top:8px">claude plugin marketplace update w-island
+claude plugin update wisland-design-system@w-island</pre>
+          </div>
 
           <div class="note" style="margin-top:18px">문의: creative@wisland.co.kr · 레포: github.com/w-island/style-guide</div>
         </section>
@@ -2025,10 +2031,12 @@
 
     /* ---------- TERMINAL DEMO (Claude Code 스타일 + 실시간 미리보기) ---------- */
     const DEMO=[
-      {k:'in',  t:'/plugin marketplace add w-island/style-guide'},
-      {k:'dot', t:'마켓플레이스 "w-island"를 추가했어요.'},
-      {k:'in',  t:'/plugin install wisland-design-system@w-island'},
-      {k:'dot', t:'플러그인을 설치했어요 — 적용하려면 세션을 새로 시작하세요.'},
+      {k:'in',  t:'더블유아일랜드 디자인 시스템 플러그인을 설치해줘.'},
+      {k:'tool',t:'Bash(claude plugin marketplace add w-island/style-guide)'},
+      {k:'tool',t:'Bash(claude plugin install wisland-design-system@w-island)'},
+      {k:'tool',t:'Update(~/.claude/settings.json)'},
+      {k:'res', t:'autoUpdate: true — 켤 때마다 자동으로 최신 가이드'},
+      {k:'dot', t:'설치했어요 — 적용하려면 Claude Code를 껐다 켜주세요.'},
       {k:'sys', t:'──────── 새 세션 ────────'},
       {k:'in',  t:'/wisland-design-system:apply 전체'},
       {k:'dot', t:'더블유아일랜드 디자인 시스템을 전체 적용할게요.'},
@@ -2079,6 +2087,10 @@
       const btn=document.getElementById('term-play');
       const cap=document.getElementById('copy-apply-prompt');
       if(cap) cap.addEventListener('click', ()=>{ const p=document.getElementById('apply-prompt'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('적용 프롬프트를 복사했어요')); });
+      ['copy-install-prompt','copy-install-prompt-2'].forEach(id=>{
+        const b=document.getElementById(id); if(!b) return;
+        b.addEventListener('click', ()=>{ const p=document.getElementById('install-prompt'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('설치 안내를 복사했어요')); });
+      });
       if(!btn) return; btn.addEventListener('click', playTerm); playTerm();
     }
 
