@@ -337,7 +337,7 @@ hover 시 뜨는 짧은 한 줄 도움말. `bg-invert` 말풍선 + `--shadow-md`
 ```css
 ::-webkit-scrollbar { width:14px; height:14px; }
 ::-webkit-scrollbar-thumb { background-color:rgba(0,0,0,.22); border-radius:999px;
-  border:4px solid transparent; background-clip:padding-box; min-height:44px; transition:background-color .2s; }
+  border:4px solid transparent; background-clip:padding-box; min-height:44px; transition:background-color .2s ease; }
 ::-webkit-scrollbar-thumb:hover { background-color:rgba(0,0,0,.38); }
 ::-webkit-scrollbar-button { display:none; }
 [data-theme="dark"] ::-webkit-scrollbar-thumb { background-color:rgba(255,255,255,.2); }

@@ -31,5 +31,14 @@ plugins/wisland-design-system/      # 플러그인 (plugin.json + 스킬 번들)
 ## ✏️ 수정 방법
 디자인 시스템은 **이 레포에서만** 수정해요. 가이드(`index.html`)와 스킬(`plugins/.../skills/`)을 함께 갱신하고 push → 팀원은 `/plugin marketplace update`로 최신 반영.
 
+> `index.html`은 사람이 보는 화면, `references/*.md`는 AI가 읽는 문서 — **같은 시스템의 두 벌**이라 한쪽만 고치면 팀원의 AI가 낡은 값으로 작업하게 됩니다.
+
+두 벌이 어긋나지 않았는지 검사:
+```
+node scripts/check-sync.mjs
+```
+push하면 GitHub Actions에서도 자동으로 돌아요. 어긋난 값이 있으면 어디가 다른지 알려주고 실패합니다.
+의도적으로 달라야 하는 값은 `scripts/check-sync.mjs`의 `ALLOWED`에 추가하세요.
+
 ---
 문의: creative@wisland.co.kr
