@@ -671,6 +671,22 @@
     [data-theme="dark"] .mini.applied .ma-badge.b1 { color:var(--blue-200); }
     [data-theme="dark"] .mini.applied .ma-alert { color:var(--blue-200); }
 
+    /* AI에게 가이드 주기 — 버튼 하나로 끝나는 진입점 */
+    .give-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .give { display:flex; flex-direction:column; gap:10px; }
+    .give-tag { font-size:12px; font-weight:700; color:var(--txt-blue-primary); letter-spacing:.04em; }
+    [data-theme="dark"] .give-tag { color:var(--blue-300); }  /* blue-500은 어두운 배경에서 대비 부족 */
+    .give-title { font-size:17px; font-weight:700; }
+    .give .note { margin:0; }
+    .give .note:not(.give-foot) { flex:1; }  /* 설명 길이가 달라도 두 카드의 버튼 높이를 맞춤 */
+    .give .btn { width:100%; }
+    .give-foot { font-size:12px; color:var(--txt-tertiary); }
+    .peek > summary { cursor:pointer; font-size:12px; color:var(--txt-tertiary); }
+    .peek[open] > summary { margin-bottom:8px; }
+    .more { margin-top:28px; border-top:1px solid var(--border-secondary); padding-top:18px; }
+    .more > summary { cursor:pointer; font-size:14px; font-weight:600; color:var(--txt-secondary); }
+    .more[open] > summary { margin-bottom:8px; }
+
     @media (max-width:900px){
       .sidebar{ display:none; }
       .container{ padding:32px 20px 100px; }
@@ -678,6 +694,7 @@
       .token-head{ display:none; }
       .token-row .desc{ grid-column:1 / -1; }
       .ba{ grid-template-columns:1fr; }
+      .give-grid{ grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -735,7 +752,7 @@
       </div>
       <div class="nav-group">
         <span>Setup</span>
-        <a href="#install">팀 설치 · 배포</a>
+        <a href="#install">AI에게 가이드 주기</a>
       </div>
     </aside>
 
@@ -1500,9 +1517,50 @@
         <!-- ============ INSTALL / SETUP ============ -->
         <section id="install">
           <div class="sec-head">
-            <h2>팀 설치 · 배포 (Claude Code)</h2>
-            <p>이 디자인 시스템을 Claude Code 플러그인으로 설치하면, 평소처럼 말하기만 해도 Claude가 이 가이드대로 작업해요. 레포를 clone할 필요 없고, 본인의 <b>모든 프로젝트</b>에 적용됩니다.</p>
+            <h2>AI에게 이 가이드 주기</h2>
+            <p>쓰는 AI에 맞춰 <b>버튼 하나 눌러 복사 → 붙여넣기.</b> 그게 전부예요.</p>
           </div>
+
+          <div class="give-grid">
+            <div class="card give">
+              <div class="give-tag">CLAUDE CODE</div>
+              <div class="give-title">한 번만 하면 계속 적용돼요</div>
+              <div class="note">붙여넣으면 설치부터 자동 최신화 설정까지 Claude가 알아서 해요. 이후로는 "버튼 추가해줘"라고만 해도 이 가이드대로 작업합니다.</div>
+              <button class="btn btn-primary" id="copy-claude-prompt">Claude에게 줄 프롬프트 복사</button>
+              <div class="note give-foot">끝나면 Claude Code를 한 번 껐다 켜주세요.</div>
+              <details class="peek"><summary>프롬프트 내용 보기</summary>
+                <pre class="cmd" id="claude-prompt">더블유아일랜드 디자인 시스템 플러그인을 설치해줘. 순서대로 해줘.
+
+1. 터미널에서 `claude plugin marketplace add w-island/style-guide` 실행
+   (이미 등록돼 있다는 메시지가 나오면 그냥 다음 단계로)
+2. 터미널에서 `claude plugin install wisland-design-system@w-island` 실행
+3. ~/.claude/settings.json 을 읽고, 기존 내용을 지우지 말고 아래 두 항목만 병합해줘.
+   이미 있으면 값만 맞춰줘.
+   - extraKnownMarketplaces 에 "w-island" 키:
+     { "source": { "source": "github", "repo": "w-island/style-guide" }, "autoUpdate": true }
+   - enabledPlugins 에 "wisland-design-system@w-island": true
+4. settings.json 이 유효한 JSON인지 확인하고, 설치된 플러그인 버전을 알려줘.</pre>
+              </details>
+            </div>
+
+            <div class="card give">
+              <div class="give-tag">CHATGPT · 그 외 AI</div>
+              <div class="give-title">대화에 붙여넣으면 바로 적용돼요</div>
+              <div class="note">설치할 게 없어요. AI가 기준 문서를 읽어와서 그 값 그대로 작업합니다. 새 대화를 시작할 때마다 한 번씩 넣어주세요.</div>
+              <button class="btn btn-primary" id="copy-gpt-prompt">GPT에게 줄 프롬프트 복사</button>
+              <div class="note give-foot">문서를 못 읽는다고 하면 <a href="wisland-design-system.md" download="더블유아일랜드-디자인시스템.md">파일을 받아</a> 첨부해주세요.</div>
+              <details class="peek"><summary>프롬프트 내용 보기</summary>
+                <pre class="cmd" id="gpt-prompt">아래 링크의 더블유아일랜드 디자인 시스템 문서를 열어서 전부 읽어줘.
+https://w-island.github.io/style-guide/wisland-design-system.md
+
+앞으로 이 대화의 UI·디자인·문구 작업은 그 문서의 색상·토큰·컴포넌트·문구 규칙을 그대로 따라줘.
+문서에 없는 값은 추측하지 말고 나에게 물어봐.</pre>
+              </details>
+            </div>
+          </div>
+
+          <details class="more">
+            <summary>자세히 — 데모 · 전체 적용 · 문제 해결 · 업데이트</summary>
 
           <div class="sub first">▶ 30초 따라하기 (실제 흐름)</div>
           <div class="note">팀원에게 이 데모를 보여주면 돼요. <b>재생</b>을 누르면 입력이 실제처럼 재현되고, 오른쪽 <b>실시간 미리보기</b>가 적용 순간 회색 → 브랜드 톤으로 바뀌어요. 아래 버튼으로 명령도 바로 복사할 수 있어요.</div>
@@ -1523,29 +1581,10 @@
           </div>
           <div class="term-tools">
             <button class="btn btn-primary sm" id="term-play">▶ 재생</button>
-            <button class="btn btn-secondary sm" id="copy-install-prompt">① 설치 안내 복사</button>
-            <button class="btn btn-secondary sm" data-copy="/wisland-design-system:apply 전체">② 전체 적용 복사</button>
+            <button class="btn btn-secondary sm" data-copy="/wisland-design-system:apply 전체">전체 적용 명령 복사</button>
           </div>
 
-          <div class="sub">1. 설치 — 붙여넣기 한 번</div>
-          <div class="note">명령어를 외울 필요 없어요. <b>Claude Code 대화 입력창</b>(평소 Claude에게 말 거는 그 칸)에 아래 문단을 <b>통째로 붙여넣고 엔터</b>하면, 마켓 등록 · 설치 · 자동 최신화 설정까지 Claude가 알아서 합니다. VS Code 확장 · 데스크탑 앱 · 터미널 CLI 모두 같은 방식이에요.</div>
-          <div class="card">
-            <pre class="cmd" id="install-prompt">더블유아일랜드 디자인 시스템 플러그인을 설치해줘. 순서대로 해줘.
-
-1. 터미널에서 `claude plugin marketplace add w-island/style-guide` 실행
-   (이미 등록돼 있다는 메시지가 나오면 그냥 다음 단계로)
-2. 터미널에서 `claude plugin install wisland-design-system@w-island` 실행
-3. ~/.claude/settings.json 을 읽고, 기존 내용을 지우지 말고 아래 두 항목만 병합해줘.
-   이미 있으면 값만 맞춰줘.
-   - extraKnownMarketplaces 에 "w-island" 키:
-     { "source": { "source": "github", "repo": "w-island/style-guide" }, "autoUpdate": true }
-   - enabledPlugins 에 "wisland-design-system@w-island": true
-4. settings.json 이 유효한 JSON인지 확인하고, 설치된 플러그인 버전을 알려줘.</pre>
-            <div class="term-tools" style="margin-top:10px"><button class="btn btn-primary sm" id="copy-install-prompt-2">설치 안내 복사</button></div>
-          </div>
-          <div class="note" style="margin-top:10px">끝나면 <b>Claude Code를 한 번 껐다 켜주세요.</b> 플러그인은 재시작해야 적용돼요.</div>
-
-          <div class="sub">2. 사용 — 그냥 말하면 돼요</div>
+          <div class="sub">1. 사용 — 그냥 말하면 돼요</div>
           <div class="note">스킬 이름을 외울 필요 없어요. UI/디자인 작업을 부탁하면 Claude가 알아서 이 디자인 시스템을 적용해요.</div>
           <div class="card">
             <div class="row-wrap">
@@ -1557,7 +1596,7 @@
             <div class="note" style="margin:14px 0 0">※ 단순한 한 줄 질문엔 안 뜰 수 있고, 실제 UI 작업일 때 발동돼요.</div>
           </div>
 
-          <div class="sub">3. 진행 중인 작업에 <b>전체 적용</b> (강하게)</div>
+          <div class="sub">2. 진행 중인 작업에 <b>전체 적용</b> (강하게)</div>
           <div class="note">"적용해줘"가 약하게 먹힐 때 — 슬래시 커맨드로 디자인 시스템을 현재 작업에 <b>전면</b> 적용해요. 토큰·컴포넌트·문구·다크모드까지 한 번에 훑어서 맞춰줍니다.</div>
           <div class="card"><pre class="cmd"><span class="c"># 진행 중인 작업/프로젝트 전체에 적용 (범위 인자 옵션)</span>
 /wisland-design-system:apply 전체
@@ -1585,11 +1624,11 @@
             <div class="term-tools" style="margin-top:10px"><button class="btn btn-primary sm" id="copy-apply-prompt">적용 프롬프트 복사</button></div>
           </div>
 
-          <div class="sub">4. 업데이트 — 자동</div>
-          <div class="note">위 설치 안내의 <b>3번(autoUpdate)</b>을 했다면 따로 할 게 없어요. Claude Code를 켤 때마다 알아서 최신 가이드로 맞춰집니다.</div>
+          <div class="sub">3. 업데이트 — 자동</div>
+          <div class="note">위 Claude 프롬프트를 그대로 썼다면 따로 할 게 없어요. 거기 <code>autoUpdate</code> 설정이 들어 있어서, Claude Code를 켤 때마다 알아서 최신 가이드로 맞춰집니다.</div>
           <div class="card">
-            <div class="comp-label">⚠️ 3번을 건너뛰면 가이드가 바뀌어도 내 Claude는 옛날 값을 계속 씁니다</div>
-            <div class="note" style="margin:6px 0 0">플러그인은 <b>설치 시점의 복사본을 캐시</b>하고, 낡아도 알려주지 않아요. 실제로 3개월 뒤처진 채 작업하다 새로 생긴 <code>/apply</code> 커맨드가 아예 없던 사례가 있었습니다.</div>
+            <div class="comp-label">⚠️ 직접 설치하면 조용히 낡습니다</div>
+            <div class="note" style="margin:6px 0 0">플러그인은 <b>설치 시점의 복사본을 캐시</b>하고, 낡아도 알려주지 않아요. 실제로 3개월 뒤처진 채 작업하다 새로 생긴 <code>/apply</code> 커맨드가 아예 없던 사례가 있었습니다. 위 프롬프트를 쓰면 이 설정이 자동으로 들어가요.</div>
           </div>
           <div class="card" style="margin-top:10px">
             <div class="comp-label">지금 당장 최신화하고 싶을 때</div>
@@ -1597,26 +1636,15 @@
 claude plugin update wisland-design-system@w-island</pre>
           </div>
 
-          <div class="sub">5. ChatGPT · 다른 AI에서 쓰기</div>
-          <div class="note">위 설치 안내는 Claude Code 전용이에요(플러그인 설치 명령이라 ChatGPT엔 안 먹혀요). 다른 AI에는 <b>기준 문서를 파일로 직접 올려주세요.</b> 토큰·컴포넌트·UX 라이팅을 한 파일로 합쳐뒀어요.</div>
+          <div class="sub">4. ChatGPT에 아예 붙박이로 두기</div>
+          <div class="note">매번 프롬프트를 넣기 싫다면, <a href="wisland-design-system.md" download="더블유아일랜드-디자인시스템.md">통합본 파일</a>을 받아서 ChatGPT <b>프로젝트 파일</b>로 올려두세요. 프로젝트 지침엔 아래 한 줄이면 됩니다. 그 프로젝트의 모든 대화에 적용돼요.</div>
           <div class="card">
-            <div class="comp-label">ChatGPT 프로젝트에 올려두기 — 한 번만</div>
-            <ol style="padding-left:18px; font-size:14px; color:var(--txt-secondary); display:grid; gap:7px; margin:6px 0 12px;">
-              <li>아래 버튼으로 통합본을 내려받아요.</li>
-              <li>ChatGPT에서 <b>새 프로젝트</b>를 만들고(예: "더블유아일랜드 UI"), 그 파일을 <b>프로젝트 파일</b>로 올려요.</li>
-              <li>프로젝트 <b>지침</b>에 아래 한 줄을 넣어요.</li>
-            </ol>
             <pre class="cmd" id="gpt-instruction">UI·디자인·문구 작업은 업로드된 더블유아일랜드 디자인 시스템 문서의 값을 그대로 쓴다. 문서에 없는 값은 추측하지 말고 물어본다.</pre>
-            <div class="term-tools" style="margin-top:10px">
-              <a class="btn btn-primary sm" href="wisland-design-system.md" download="더블유아일랜드-디자인시스템.md">통합본 내려받기</a>
-              <button class="btn btn-secondary sm" id="copy-gpt-instruction">지침 문구 복사</button>
-            </div>
-            <div class="note" style="margin:12px 0 0">이러면 그 프로젝트의 <b>모든 대화</b>에 적용돼요. 채팅마다 다시 붙여넣지 않아도 됩니다.</div>
+            <div class="term-tools" style="margin-top:10px"><button class="btn btn-secondary sm" id="copy-gpt-instruction">지침 문구 복사</button></div>
+            <div class="note" style="margin:12px 0 0">⚠️ 업로드한 <b>파일은 자동 갱신되지 않아요.</b> 가이드가 바뀌면 새로 받아 올려주세요. (링크를 읽는 위 GPT 프롬프트는 항상 최신을 봅니다)</div>
           </div>
-          <div class="card" style="margin-top:10px">
-            <div class="comp-label">⚠️ 이 파일은 자동으로 갱신되지 않아요</div>
-            <div class="note" style="margin:6px 0 0">Claude 플러그인과 달리 업로드한 파일은 그 시점에 멈춰 있어요. <b>가이드가 바뀌면 새로 받아서 다시 올려주세요.</b> 자동 최신화가 필요하면 Claude Code 쪽(1번)을 쓰세요.</div>
-          </div>
+
+          </details>
 
           <div class="note" style="margin-top:18px">문의: creative@wisland.co.kr · 레포: github.com/w-island/style-guide</div>
         </section>
@@ -2109,12 +2137,14 @@ claude plugin update wisland-design-system@w-island</pre>
       const btn=document.getElementById('term-play');
       const cap=document.getElementById('copy-apply-prompt');
       if(cap) cap.addEventListener('click', ()=>{ const p=document.getElementById('apply-prompt'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('적용 프롬프트를 복사했어요')); });
-      ['copy-install-prompt','copy-install-prompt-2'].forEach(id=>{
-        const b=document.getElementById(id); if(!b) return;
-        b.addEventListener('click', ()=>{ const p=document.getElementById('install-prompt'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('설치 안내를 복사했어요')); });
+      /* 버튼 id → 복사할 <pre> id, 토스트 문구 */
+      [['copy-claude-prompt','claude-prompt','Claude에게 줄 프롬프트를 복사했어요'],
+       ['copy-gpt-prompt','gpt-prompt','GPT에게 줄 프롬프트를 복사했어요'],
+       ['copy-gpt-instruction','gpt-instruction','지침 문구를 복사했어요']].forEach(([btnId,preId,msg])=>{
+        const b=document.getElementById(btnId), p=document.getElementById(preId);
+        if(!b||!p) return;
+        b.addEventListener('click', ()=>navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast(msg)));
       });
-      const gi=document.getElementById('copy-gpt-instruction');
-      if(gi) gi.addEventListener('click', ()=>{ const p=document.getElementById('gpt-instruction'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('지침 문구를 복사했어요')); });
       if(!btn) return; btn.addEventListener('click', playTerm); playTerm();
     }
 
