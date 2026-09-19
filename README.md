@@ -8,7 +8,7 @@ Claude Code 플러그인으로 배포합니다.
 **https://w-island.github.io/style-guide/**
 (색상 칩 클릭 → HEX 복사, 우측 상단 토글 → 다크 모드, 스크롤 시 좌측 네비에 현재 위치 표시)
 
-## 📦 설치 (팀원용, 딱 한 번)
+## 📦 설치 — Claude Code (팀원용, 딱 한 번)
 
 **Claude Code 입력창에 아래 문단을 통째로 붙여넣고 엔터**를 누르세요. 나머지는 Claude가 알아서 합니다.
 
@@ -41,9 +41,40 @@ claude plugin marketplace update w-island
 claude plugin update wisland-design-system@w-island
 ```
 
+## 📦 설치 — Codex (팀원용, 딱 한 번)
+
+Codex도 같은 레포를 마켓플레이스로 읽어요. **터미널**에서 두 줄이면 끝납니다.
+
+```
+codex plugin marketplace add w-island/style-guide
+codex plugin add wisland-design-system@w-island
+```
+
+`codex` 명령이 없다고 나오면 ChatGPT 앱에 들어 있는 것을 쓰세요.
+```
+/Applications/ChatGPT.app/Contents/Resources/codex plugin marketplace add w-island/style-guide
+/Applications/ChatGPT.app/Contents/Resources/codex plugin add wisland-design-system@w-island
+```
+
+끝나면 **새 스레드를 열어주세요.** (플러그인은 새 대화부터 인식돼요)
+
+설치 확인:
+```
+codex plugin list | grep wisland
+```
+
+최신으로 당겨오기:
+```
+codex plugin marketplace upgrade w-island
+codex plugin add wisland-design-system@w-island
+```
+
+> Claude의 `/wisland-design-system:apply` 같은 슬래시 커맨드는 Codex에 없어요.
+> Codex에선 *"이 화면 전체를 디자인 시스템에 맞게 정리해줘"* 처럼 말로 부탁하면 같은 스킬이 발동합니다.
+
 ## 🤖 ChatGPT · 다른 AI에서 쓰기
 
-위 설치 블록은 Claude Code 전용이에요(플러그인 설치 명령이라 ChatGPT엔 안 먹혀요).
+위 설치 블록은 Claude Code · Codex 전용이에요(플러그인 설치 명령이라 웹 ChatGPT엔 안 먹혀요).
 ChatGPT엔 **아래 문단을 대화에 붙여넣으면 끝**입니다. 설치할 게 없어요.
 
 ```
@@ -66,12 +97,20 @@ https://w-island.github.io/style-guide/wisland-design-system.md
 
 ## 📁 구성
 ```
-index.html                          # 디자인 시스템 가이드 (GitHub Pages)
-wisland-design-system.md            # 외부 AI용 통합본 (자동 생성 — 직접 고치지 마세요)
-.claude-plugin/marketplace.json     # 마켓플레이스 "w-island"
-plugins/wisland-design-system/      # 플러그인 (plugin.json + 스킬 번들)
-scripts/                            # 동기화 검사 · 통합본 빌드
+index.html                             # 디자인 시스템 가이드 (GitHub Pages)
+wisland-design-system.md               # 외부 AI용 통합본 (자동 생성 — 직접 고치지 마세요)
+.claude-plugin/marketplace.json        # 마켓플레이스 "w-island" — Claude Code용
+.agents/plugins/marketplace.json       # 마켓플레이스 "w-island" — Codex용
+plugins/wisland-design-system/
+  ├── .claude-plugin/plugin.json       # Claude 매니페스트
+  ├── .codex-plugin/plugin.json        # Codex 매니페스트
+  ├── commands/apply.md                # /apply (Claude 전용 — Codex는 무시)
+  └── skills/                          # 스킬 문서 (두 AI가 공유하는 한 벌)
+scripts/                               # 동기화 검사 · 통합본 빌드 · 매니페스트 대조
 ```
+
+> 플러그인 형식만 AI마다 두 벌이고, **실제 내용(스킬 문서)은 한 벌**이에요.
+> 그래서 가이드를 고치면 Claude·Codex·ChatGPT가 같은 값을 봅니다.
 
 ## ✏️ 수정 방법
 디자인 시스템은 **이 레포에서만** 수정해요. 가이드(`index.html`)와 스킬(`plugins/.../skills/`)을 함께 갱신하고 push하면, 위 설치 안내를 따른 팀원에게는 다음 실행 때 자동으로 반영됩니다.
@@ -83,11 +122,16 @@ scripts/                            # 동기화 검사 · 통합본 빌드
 node scripts/build-bundle.mjs
 ```
 
-두 벌이 어긋나지 않았는지 검사:
+버전을 올렸다면 **매니페스트 네 곳을 같이** 고쳐야 해요
+(`.claude-plugin/plugin.json` · `.codex-plugin/plugin.json` · 두 `marketplace.json`).
+한쪽만 고치면 Claude와 Codex가 서로 다른 버전을 쓰게 됩니다.
+
+어긋나지 않았는지 검사:
 ```
-node scripts/check-sync.mjs
+node scripts/check-sync.mjs        # 사이트 ↔ 스킬 문서 값 대조
+node scripts/check-manifests.mjs   # Claude ↔ Codex 매니페스트 대조
 ```
-push하면 GitHub Actions에서 위 두 가지(값 대조 + 통합본 최신 여부)가 자동으로 돌아요.
+push하면 GitHub Actions에서 위 세 가지(값 대조 + 통합본 최신 여부 + 매니페스트 대조)가 자동으로 돌아요.
 어긋나면 어디가 다른지 알려주고 실패합니다.
 의도적으로 달라야 하는 값은 `scripts/check-sync.mjs`의 `ALLOWED`에 추가하세요.
 

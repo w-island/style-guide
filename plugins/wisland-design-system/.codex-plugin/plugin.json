@@ -1,0 +1,29 @@
+{
+  "name": "wisland-design-system",
+  "version": "1.1.0",
+  "description": "더블유아일랜드 사내 도구(AI Hub 등) UI를 만들거나 수정할 때 따르는 디자인 시스템 — W-ISLAND Blue/중립 그레이 토큰, Pretendard 타이포, 라인 아이콘, 컴포넌트(버튼·입력·리스트·뱃지·탭·토글·캘린더·오버레이), 로고/GNB·LNB 패턴, 해요체 UX 라이팅 6원칙.",
+  "author": {
+    "name": "W-Island Creative",
+    "email": "creative@wisland.co.kr",
+    "url": "https://github.com/w-island"
+  },
+  "homepage": "https://w-island.github.io/style-guide/",
+  "repository": "https://github.com/w-island/style-guide",
+  "keywords": ["design-system", "ui", "design-tokens", "wisland", "ai-hub"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "더블유아일랜드 디자인 시스템",
+    "shortDescription": "사내 도구 UI의 색·컴포넌트·문구 기준",
+    "longDescription": "화면·컴포넌트·HTML/CSS를 만들거나 고칠 때 W-ISLAND Blue 컬러 토큰, Pretendard 타이포, 라인 아이콘, 컴포넌트 패턴, 해요체 UX 라이팅 6원칙을 자동으로 따르게 합니다. 시각 가이드는 https://w-island.github.io/style-guide/ 에 있습니다.",
+    "developerName": "W-Island Creative",
+    "category": "Design",
+    "capabilities": [],
+    "websiteURL": "https://w-island.github.io/style-guide/",
+    "brandColor": "#1577CC",
+    "defaultPrompt": [
+      "이 화면을 우리 디자인 시스템에 맞게 정리해줘.",
+      "버튼이랑 입력창을 디자인 시스템대로 만들어줘.",
+      "이 안내 문구를 해요체 가이드대로 다듬어줘."
+    ]
+  }
+}

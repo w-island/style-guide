@@ -1,0 +1,20 @@
+{
+  "name": "w-island",
+  "interface": {
+    "displayName": "더블유아일랜드"
+  },
+  "plugins": [
+    {
+      "name": "wisland-design-system",
+      "source": {
+        "source": "local",
+        "path": "./plugins/wisland-design-system"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Design"
+    }
+  ]
+}

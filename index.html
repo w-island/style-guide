@@ -672,7 +672,7 @@
     [data-theme="dark"] .mini.applied .ma-alert { color:var(--blue-200); }
 
     /* AI에게 가이드 주기 — 버튼 하나로 끝나는 진입점 */
-    .give-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .give-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }  /* Claude · Codex · ChatGPT */
     .give { display:flex; flex-direction:column; gap:10px; }
     .give-tag { font-size:12px; font-weight:700; color:var(--txt-blue-primary); letter-spacing:.04em; }
     [data-theme="dark"] .give-tag { color:var(--blue-300); }  /* blue-500은 어두운 배경에서 대비 부족 */
@@ -695,6 +695,9 @@
       .token-row .desc{ grid-column:1 / -1; }
       .ba{ grid-template-columns:1fr; }
       .give-grid{ grid-template-columns:1fr; }
+    }
+    @media (min-width:901px) and (max-width:1180px){
+      .give-grid{ grid-template-columns:1fr 1fr; }  /* 3열은 좁아서 카드 글자가 줄줄이 끊겨요 */
     }
   </style>
 </head>
@@ -1544,6 +1547,21 @@
             </div>
 
             <div class="card give">
+              <div class="give-tag">CODEX</div>
+              <div class="give-title">터미널에 두 줄이면 끝나요</div>
+              <div class="note">Claude와 같은 레포를 읽어요. 설치하면 "이 화면 정리해줘"처럼 말로 부탁해도 이 가이드대로 작업합니다.</div>
+              <button class="btn btn-primary" id="copy-codex-cmd">Codex 설치 명령 복사</button>
+              <div class="note give-foot"><code>codex</code> 명령이 없다면 ChatGPT 앱 안의 것을 쓰세요 — 자세히 열면 경로가 있어요. 끝나면 새 스레드를 열어주세요.</div>
+              <details class="peek"><summary>명령 내용 보기</summary>
+                <pre class="cmd" id="codex-cmd">codex plugin marketplace add w-island/style-guide
+codex plugin add wisland-design-system@w-island</pre>
+                <div class="note" style="margin-top:8px"><code>codex: command not found</code> 가 나오면 아래를 쓰세요.</div>
+                <pre class="cmd">/Applications/ChatGPT.app/Contents/Resources/codex plugin marketplace add w-island/style-guide
+/Applications/ChatGPT.app/Contents/Resources/codex plugin add wisland-design-system@w-island</pre>
+              </details>
+            </div>
+
+            <div class="card give">
               <div class="give-tag">CHATGPT · 그 외 AI</div>
               <div class="give-title">대화에 붙여넣으면 바로 적용돼요</div>
               <div class="note">설치할 게 없어요. AI가 기준 문서를 읽어와서 그 값 그대로 작업합니다. 새 대화를 시작할 때마다 한 번씩 넣어주세요.</div>
@@ -2139,6 +2157,7 @@ claude plugin update wisland-design-system@w-island</pre>
       if(cap) cap.addEventListener('click', ()=>{ const p=document.getElementById('apply-prompt'); if(p) navigator.clipboard?.writeText(p.textContent.trim()).then(()=>showToast('적용 프롬프트를 복사했어요')); });
       /* 버튼 id → 복사할 <pre> id, 토스트 문구 */
       [['copy-claude-prompt','claude-prompt','Claude에게 줄 프롬프트를 복사했어요'],
+       ['copy-codex-cmd','codex-cmd','Codex 설치 명령을 복사했어요'],
        ['copy-gpt-prompt','gpt-prompt','GPT에게 줄 프롬프트를 복사했어요'],
        ['copy-gpt-instruction','gpt-instruction','지침 문구를 복사했어요']].forEach(([btnId,preId,msg])=>{
         const b=document.getElementById(btnId), p=document.getElementById(preId);

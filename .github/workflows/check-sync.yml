@@ -5,8 +5,11 @@ on:
     paths:
       - 'index.html'
       - 'plugins/**/*.md'
+      - 'plugins/**/plugin.json'
       - 'wisland-design-system.md'
       - 'scripts/*.mjs'
+      - '.claude-plugin/marketplace.json'
+      - '.agents/plugins/marketplace.json'
   pull_request:
   workflow_dispatch:
 
@@ -22,3 +25,5 @@ jobs:
         run: node scripts/check-sync.mjs
       - name: 외부 AI용 통합본이 최신인지 확인
         run: node scripts/build-bundle.mjs --check
+      - name: Claude ↔ Codex 매니페스트 대조
+        run: node scripts/check-manifests.mjs
